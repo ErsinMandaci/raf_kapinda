@@ -24,11 +24,7 @@ class ProductNotifier extends ChangeNotifier {
   double totalCardPrice = 0;
 
   Future<void> fetchAndLoad() async {
-    dataloading = true;
-    notifyListeners();
     await allProduct();
-    dataloading = false;
-    print(isLoading);
 
     notifyListeners();
   }

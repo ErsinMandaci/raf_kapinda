@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/widgets/card/custom_card_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
@@ -29,7 +30,11 @@ class CategoryFilterPage extends ConsumerWidget {
         itemCount: filtCategory.length,
         itemBuilder: (context, index) {
           final filtProduct = filtCategory[index];
-          return CustomCard(
+          if(filtProduct.imageUrl == null) {
+            return const Center(child: CircularProgressIndicator(color: ColorConst.primaryColor,));
+          } 
+          return
+           CustomCard(
               imageUrl: filtProduct.imageUrl,
               name: filtProduct.name,
               weigth: filtProduct.weight,

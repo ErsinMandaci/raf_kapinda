@@ -12,7 +12,7 @@ class PageBuilder extends StatefulWidget {
 
 class _PageBuilderState extends State<PageBuilder> {
   late PageController _pageController;
-  int activePage = 1;
+  int activePage = 0;
   @override
   void initState() {
     super.initState();

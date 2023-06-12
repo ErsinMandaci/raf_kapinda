@@ -4,6 +4,7 @@ import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
+import 'package:groceries_app/features/account/account_page.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:groceries_app/models/products.dart';
 import 'package:kartal/kartal.dart';
@@ -187,8 +188,18 @@ class CartPage extends ConsumerWidget {
                                             onPressed: () {
                                               ref
                                                   .read(firestoreProvider)
-                                                  .pushBasketDataToFiresore(
-                                                      basketProducts);
+                                                  .pushBasketDataToFirestore(
+                                                      basketProducts)
+                                                  .then((value) =>
+                                                      basketProducts.clear())
+                                                  .then((value) => Navigator
+                                                      .pushAndRemoveUntil(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const AccountPage()),
+                                                          (route) => false));
+
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
                                                 backgroundColor:

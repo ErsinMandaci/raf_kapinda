@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
-import 'package:groceries_app/core/enums/image_enums.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_textField.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
@@ -46,7 +45,9 @@ class LogInPage extends ConsumerWidget {
                 child: Padding(
                   padding: EdgeInsets.only(top: context.onlyTopPaddingHigh.top),
                   child: Image.asset(
-                    ImageEnum.havuc.toPng,
+                    'assets/images/ModaKafeLogo.png',
+                    width: context.dynamicWidth(0.5),
+                    height: context.dynamicHeight(0.2),
                   ),
                 ),
               ),

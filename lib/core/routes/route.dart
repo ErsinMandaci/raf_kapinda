@@ -1,5 +1,6 @@
 //define routes here
 import 'package:flutter/cupertino.dart';
+import 'package:groceries_app/features/account/account_item/orders.dart';
 import 'package:groceries_app/features/auth/sign_in_page.dart';
 import 'package:groceries_app/features/auth/sign_up_page.dart';
 import 'package:groceries_app/features/explore/category_filter.dart';
@@ -27,6 +28,7 @@ const String bottomPageBuilder = 'bottomPageBuilder';
 const String detailPage = 'detail';
 const String settingsPage = 'settings';
 const String categoryFilter = 'categoryFilter';
+const String orders = 'orders';
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
@@ -59,6 +61,9 @@ Route<dynamic> controller(RouteSettings settings) {
     case categoryFilter:
       return CupertinoPageRoute(
           builder: (context) => const CategoryFilterPage());
+
+    case orders:
+      return CupertinoPageRoute(builder: (context) => const OrdersPage());
 
     default:
       throw const FormatException('Route not found');
