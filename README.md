@@ -29,7 +29,7 @@
 
 <div>
     <img src="assets/app_ss/account.png" alt="Home" width="400"/>
-    <img src="assets/app_ss/place_order.png.png" alt="Home" width="400"/>
+    <img src="assets/app_ss/place_order.png" alt="Home" width="400"/>
    
 </div>
 
