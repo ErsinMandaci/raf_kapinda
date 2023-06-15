@@ -18,7 +18,7 @@
 </div>
 
 <div>
-    <img src="assets/app_ss/favourite.png.png" alt="Home" width="400"/>
+    <img src="assets/app_ss/favourite.png" alt="Home" width="400"/>
     <img src="assets/app_ss/search.png" alt="Category" width="400"/>
 </div>
 
