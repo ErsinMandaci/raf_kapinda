@@ -20,7 +20,7 @@ class FirestoreNotifer extends ChangeNotifier {
 
   Future<List<Products>> getOrders() async {
     final orders = await _firestoreService.getOrders();
-
+        orderList.clear();
     if (orders.isNotEmpty) {
       orderList.addAll(orders);
     } else {

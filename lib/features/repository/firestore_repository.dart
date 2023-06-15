@@ -30,36 +30,34 @@ class FirestoreRepository implements DBBase {
   }
 
   @override
- Future<List<Products>> getOrders() async {
-  CollectionReference<Map<String, dynamic>> orderCollection =
-      _firestore.collection('orders');
-  User? user = FirebaseAuth.instance.currentUser;
-  
-  QuerySnapshot<Map<String, dynamic>> querySnapshot = await orderCollection
-      .where('userID', isEqualTo: user?.uid)
-      .get();
+  Future<List<Products>> getOrders() async {
+    CollectionReference<Map<String, dynamic>> orderCollection =
+        _firestore.collection('orders');
+    User? user = FirebaseAuth.instance.currentUser;
 
-  List<Products> products = [];
-  if (querySnapshot.docs.isNotEmpty) {
-    for (QueryDocumentSnapshot<Map<String, dynamic>> doc
-        in querySnapshot.docs) {
-      List<dynamic> productsData = doc['products'];
-      for (dynamic productData in productsData) {
-        Products product = Products(
-          id: productData['productId'],
-          name: productData['name'],
-          price: productData['price'],
-          imageUrl: productData['image'],
-          quantity: productData['quantity'],
-        );
-        products.add(product);
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await orderCollection.where('userID', isEqualTo: user?.uid).get();
+
+    List<Products> products = [];
+    if (querySnapshot.docs.isNotEmpty) {
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+          in querySnapshot.docs) {
+        List<dynamic> productsData = doc['products'];
+        for (dynamic productData in productsData) {
+          Products product = Products(
+            id: productData['productId'],
+            name: productData['name'],
+            price: productData['price'],
+            imageUrl: productData['image'],
+            quantity: productData['quantity'],
+          );
+          products.add(product);
+        }
       }
     }
+
+    return products;
   }
-
-  return products;
-}
-
 
   @override
   Future<void> pushBasketDataToFirestore(List<Products> basketProducts) async {
