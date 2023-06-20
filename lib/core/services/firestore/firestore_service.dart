@@ -1,7 +1,10 @@
 import 'package:groceries_app/features/repository/firestore_repository.dart';
 import 'package:groceries_app/locator.dart';
-import 'package:groceries_app/models/products.dart';
-import 'package:groceries_app/models/user_model.dart';
+
+import '../../../model/orders.dart';
+import '../../../model/products.dart';
+import '../../../model/user_model.dart';
+
 
 class FirestoreService {
   final FirestoreRepository _firestoreRepository =
@@ -14,9 +17,9 @@ class FirestoreService {
     return _firestoreRepository.addUser(user);
   }
 
-  Future<List<Products>> getOrders() async {
+  Future<List<Orders>> getOrders() async {
     final ordersCollection = _firestoreRepository.getOrders();
-
+        
       return ordersCollection;
   }
 

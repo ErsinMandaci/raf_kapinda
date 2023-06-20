@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
-import 'package:groceries_app/features/account/account_page.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
-import 'package:groceries_app/models/products.dart';
 import 'package:kartal/kartal.dart';
+
+import '../../model/products.dart';
 
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
@@ -45,11 +46,10 @@ class CartPage extends ConsumerWidget {
                         return ListTile(
                           visualDensity: const VisualDensity(vertical: 4),
                           leading: Image.network(
-                            basketIndex.imageUrl ?? 'not image',
-                            width: context.dynamicWidth(0.2),
-                            height: context.dynamicHeight(0.1),
-                            fit: BoxFit.fill,
-                          ),
+                              basketIndex.imageUrl ?? 'not image',
+                              width: context.dynamicWidth(0.2),
+                              height: context.dynamicHeight(0.1),
+                              fit: BoxFit.fill),
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -197,7 +197,7 @@ class CartPage extends ConsumerWidget {
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  const AccountPage()),
+                                                                  const BottomPageBuilder()),
                                                           (route) => false));
 
                                               ScaffoldMessenger.of(context)

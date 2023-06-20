@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/services/firestore/firestore_base.dart';
-import 'package:groceries_app/models/user_model.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../models/products.dart';
+import '../../model/orders.dart';
+import '../../model/products.dart';
+import '../../model/user_model.dart';
 
 class FirestoreRepository implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -30,71 +32,74 @@ class FirestoreRepository implements DBBase {
   }
 
   @override
-  Future<List<Products>> getOrders() async {
+  Future<List<Orders>> getOrders() async {
+    var uuid = const Uuid();
     CollectionReference<Map<String, dynamic>> orderCollection =
         _firestore.collection('orders');
-    User? user = FirebaseAuth.instance.currentUser;
 
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await orderCollection.where('userID', isEqualTo: user?.uid).get();
+        await orderCollection.where('userId', isEqualTo: _user?.uid).get();
 
-    List<Products> products = [];
-    if (querySnapshot.docs.isNotEmpty) {
-      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
-          in querySnapshot.docs) {
-        List<dynamic> productsData = doc['products'];
-        for (dynamic productData in productsData) {
-          Products product = Products(
-            id: productData['productId'],
-            name: productData['name'],
-            price: productData['price'],
-            imageUrl: productData['image'],
-            quantity: productData['quantity'],
-          );
-          products.add(product);
-        }
-      }
+    List<Orders> orders = [];
+
+    for (var document in querySnapshot.docs) {
+      List<dynamic> productsData = document.data()['products'];
+   
+
+      List<Products> products = productsData.map((productData) {
+        return Products(
+          id: productData['id'],
+          name: productData['name'],
+          price: productData['price'],
+          imageUrl: productData['imageUrl'],
+          quantity: productData['quantity'],
+        );
+      }).toList();
+      var createdAtTimestamp = document.data()['createdAt'];
+      DateTime createdAt =
+          DateTime.fromMillisecondsSinceEpoch(createdAtTimestamp);
+
+
+
+
+      Orders order = Orders(
+        orderId: document.id,
+        userId: document.data()['userId'],
+        orderNumber: uuid.v4(),
+        createdAt: createdAt,
+        products: products,
+      );
+
+      orders.add(order);
     }
 
-    return products;
+    return orders;
   }
 
   @override
   Future<void> pushBasketDataToFirestore(List<Products> basketProducts) async {
-    CollectionReference<Map<String, dynamic>> orderCollection =
-        _firestore.collection('orders');
-    User? user = FirebaseAuth.instance.currentUser;
-    DocumentReference<Map<String, dynamic>> newOrderDocument =
-        orderCollection.doc();
+       var uuid = const Uuid();
+    DocumentReference<Map<String, dynamic>> orderCollection =
+        _firestore.collection('orders').doc();
 
-    Map<String, dynamic> orderData = {
-      'userID': user?.uid,
-      'products': basketProducts
-          .map((product) => {
-                'productId': product.id,
-                'name': product.name,
-                'price': product.price,
-                'image': product.imageUrl,
-                'quantity': product.quantity,
-              })
-          .toList(),
-    };
+    Orders orders = Orders(
+      orderId: orderCollection.id,
+      userId: _user?.uid ?? '',
+      orderNumber: uuid.v4(),
+      products: basketProducts,
+      createdAt: DateTime.now(),
+    );
 
-    await newOrderDocument.set(orderData);
+    await orderCollection.set(orders.toMap());
   }
 
+  @override
   @override
   Future<UserModel> readUser(String userID) async {
     DocumentSnapshot snapshot =
         await _firestore.collection('users').doc(userID).get();
-
-    if (snapshot.exists) {
-      Map<String, dynamic> userMap = snapshot.data() as Map<String, dynamic>;
-      UserModel user = UserModel.fromMap(userMap);
-      return user;
-    } else {
-      debugPrint('Kullanici veritabanında yok (Read User FirestoreDBService)');
-      return UserModel();
-    }
+    return snapshot.exists
+        ? UserModel.fromMap(snapshot.data() as Map<String, dynamic>)
+        : UserModel();
   }
 }

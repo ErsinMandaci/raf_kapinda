@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/features/repository/product_repository.dart';
 import 'package:groceries_app/locator.dart';
-import 'package:groceries_app/models/categories.dart';
-import 'package:groceries_app/models/groceries.dart';
-import 'package:groceries_app/models/products.dart';
+
+import '../../model/categories.dart';
+import '../../model/groceries.dart';
+import '../../model/products.dart';
 
 class ProductNotifier extends ChangeNotifier {
   final ProductRepository _productRepository = locator<ProductRepository>();
@@ -66,10 +67,10 @@ class ProductNotifier extends ChangeNotifier {
         .toList();
   }
 
-  double totalPrice(Products product) {
+  String totalPrice(Products product) {
     total = product.price! * product.quantity!;
     notifyListeners();
-    return total;
+    return total.toStringAsFixed(2);
   }
 
   void counterIncrement(Products product) {
@@ -87,10 +88,11 @@ class ProductNotifier extends ChangeNotifier {
     }
     notifyListeners();
   }
+  
 
   List<Products> addBasket() {
     isLoading = true;
-    print(isLoading);
+
     notifyListeners();
     if (selectedProducts.isNotEmpty) {
       int existingProductIndex =
@@ -107,7 +109,7 @@ class ProductNotifier extends ChangeNotifier {
     }
     Future.delayed(const Duration(seconds: 4), () {
       isLoading = false;
-      print(isLoading);
+   
       notifyListeners();
     });
 

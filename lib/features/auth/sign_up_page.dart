@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/enums/image_enums.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
-import 'package:groceries_app/core/widgets/custom_textField.dart';
+import 'package:groceries_app/core/widgets/custom_form_text.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
-import 'package:groceries_app/models/user_model.dart';
 import 'package:kartal/kartal.dart';
 
+import '../../model/user_model.dart';
 import '../provider/riverpod_management.dart';
 
 // ignore: must_be_immutable

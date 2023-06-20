@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:groceries_app/core/widgets/card/custom_button_card.dart';
 import 'package:kartal/kartal.dart';
 
-import '../../../models/products.dart';
+import '../../../model/products.dart';
+
 import '../custom_sub_text_widget.dart';
 import '../custom_text_widget.dart';
 

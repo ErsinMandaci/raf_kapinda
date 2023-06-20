@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/provider/riverpod_management.dart';
-import '../../../models/products.dart';
+import '../../../model/products.dart';
+
 import '../../constants/color.dart';
 
 class CustomAddButton extends ConsumerWidget {

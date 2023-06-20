@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:groceries_app/core/services/firebase/auth_base.dart';
-import 'package:groceries_app/models/user_model.dart';
+
+import '../../../model/user_model.dart';
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

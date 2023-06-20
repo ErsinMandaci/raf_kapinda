@@ -1,9 +1,9 @@
 import 'package:groceries_app/core/services/firebase/auth_base.dart';
 import 'package:groceries_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:groceries_app/locator.dart';
-import 'package:groceries_app/models/user_model.dart';
 
 import '../../core/services/firestore/firestore_service.dart';
+import '../../model/user_model.dart';
 
 class UserRepository implements AuthBase {
   final FirebaseAuthService _firebaseAuth = locator<FirebaseAuthService>();

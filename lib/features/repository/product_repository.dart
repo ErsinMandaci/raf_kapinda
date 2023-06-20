@@ -1,9 +1,11 @@
-import 'package:groceries_app/models/groceries.dart';
+
 
 import '../../core/services/product/product_service.dart';
 import '../../locator.dart';
-import '../../models/categories.dart';
-import '../../models/products.dart';
+import '../../model/categories.dart';
+import '../../model/groceries.dart';
+import '../../model/products.dart';
+
 
 class ProductRepository {
   final ProductService _productService = locator<ProductService>();

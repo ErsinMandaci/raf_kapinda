@@ -21,7 +21,11 @@ class Products with EquatableMixin {
     this.quantity,
     this.categoryId,
     this.weight,
+   
   });
+
+  String get formattedPrice => price != null ? price!.toStringAsFixed(2) : '0.00';
+
 
   @override
   List<Object?> get props => [
@@ -87,4 +91,6 @@ class Products with EquatableMixin {
       weight: json['weight'] as String?,
     );
   }
+
+  toMap() {}
 }

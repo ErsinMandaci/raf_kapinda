@@ -1,6 +1,6 @@
 //define routes here
 import 'package:flutter/cupertino.dart';
-import 'package:groceries_app/features/account/account_item/orders.dart';
+import 'package:groceries_app/features/account/account_item/orders_page.dart';
 import 'package:groceries_app/features/auth/sign_in_page.dart';
 import 'package:groceries_app/features/auth/sign_up_page.dart';
 import 'package:groceries_app/features/explore/category_filter.dart';
@@ -12,7 +12,7 @@ import 'package:groceries_app/features/product_detail/product_detail.dart';
 
 import '../../features/auth/landing_page.dart';
 import '../../features/auth/log_in_page.dart';
-import '../widgets/auth_widget/auth_checker-widget.dart';
+import '../widgets/auth_widget/auth_checker_widget.dart';
 
 //Route name constants
 
