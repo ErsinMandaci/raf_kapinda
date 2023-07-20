@@ -6,7 +6,7 @@
             "price": 2.5,
             "stock": 100,
             "description": "Fresh and delicious apple.",
-            "imageUrl": "https://png.pngtree.com/element_our/png_detail/20181129/vector-illustration-of-fresh-red-apple-with-single-leaf-png_248312.jpg",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
             "quantity": 1,
             "categoryId": 1,
             "weight": "100 grams"
@@ -120,8 +120,8 @@
             "quantity": 1,
             "categoryId": 2,
             "weight": "200 grams"
-          },
-          {
+        },
+        {
             "id": 12,
             "name": "Tea",
             "price": 2.5,
@@ -131,8 +131,8 @@
             "quantity": 1,
             "categoryId": 2,
             "weight": "150 grams"
-          },
-          {
+        },
+        {
             "id": 13,
             "name": "Apple Juice",
             "price": 4.5,
@@ -142,8 +142,8 @@
             "quantity": 1,
             "categoryId": 2,
             "weight": "250 grams"
-          },
-          {
+        },
+        {
             "id": 14,
             "name": "Coke",
             "price": 2.99,
@@ -153,8 +153,8 @@
             "quantity": 1,
             "categoryId": 2,
             "weight": "330 ml"
-          },
-          {
+        },
+        {
             "id": 15,
             "name": "Pepsi",
             "price": 2.75,
@@ -164,50 +164,49 @@
             "quantity": 1,
             "categoryId": 2,
             "weight": "330 ml"
-          },
-          {
+        },
+        {
             "id": 16,
             "name": "Coca Cola",
             "price": 3.25,
             "stock": 40,
             "description": "World-famous cola beverage.",
             "imageUrl": "https://w7.pngwing.com/pngs/742/816/png-transparent-coke-coke-drink-soft-drink-thumbnail.png",
-            "quantity":1,
+            "quantity": 1,
             "categoryId": 2,
             "weight": "330 ml"
-          }
-
+        }
     ],
     "categories": [
         {
             "id": 1,
             "name": "Frash Fruits \n& Vegetable",
-            "categoryImage" : "https://nativenewsonline.net/images/2022/Fruit.png"
+            "categoryImage": "https://nativenewsonline.net/images/2022/Fruit.png"
         },
         {
             "id": 2,
             "name": "Beverage",
-            "categoryImage" : "https://5.imimg.com/data5/SELLER/Default/2020/10/NP/NQ/FF/115160227/q-500x500.png"
+            "categoryImage": "https://5.imimg.com/data5/SELLER/Default/2020/10/NP/NQ/FF/115160227/q-500x500.png"
         },
         {
             "id": 3,
             "name": "Bakery & Snacks",
-            "categoryImage" : "https://www.pngall.com/wp-content/uploads/7/Bakery-PNG-Free-Download.png"
+            "categoryImage": "https://www.pngall.com/wp-content/uploads/7/Bakery-PNG-Free-Download.png"
         },
         {
             "id": 5,
             "name": "Cooking Oil & Ghee",
-            "categoryImage" : "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
+            "categoryImage": "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
         },
         {
             "id": 6,
             "name": "Meat & Fish",
-            "categoryImage" : "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
+            "categoryImage": "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
         },
         {
             "id": 7,
             "name": "Dairy & Eggs",
-            "categoryImage" : "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
+            "categoryImage": "https://cdn.shopify.com/s/files/1/0043/9064/9974/collections/9769f21698b53a63a90630503faeae75.jpg?v=1655384886"
         }
     ]
 }

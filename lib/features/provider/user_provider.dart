@@ -1,17 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:groceries_app/core/services/firebase/auth_base.dart';
 import 'package:groceries_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:groceries_app/features/repository/user_repository.dart';
-import 'package:groceries_app/locator.dart';
-import '../../core/services/firebase/auth_base.dart';
-import '../../model/user_model.dart';
+import 'package:groceries_app/locator_manager.dart';
+import 'package:groceries_app/model/user_model.dart';
 
 enum ViewState { idle, busy }
 
 class UserNotifier extends ChangeNotifier implements AuthBase {
-  final UserRepository _userRepository = locator<UserRepository>();
-  final FirebaseAuthService _firebaseService = locator<FirebaseAuthService>();
-  // final List<UserModel> _userList = [];
+  final UserRepository _userRepository = LocatorManager.userRepository;
+  final FirebaseAuthService _firebaseService = LocatorManager.firebaseAuth;
 
   UserModel? _user;
 
@@ -20,27 +19,29 @@ class UserNotifier extends ChangeNotifier implements AuthBase {
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
 
-  setViewState(ViewState value) {
+  void setViewState(ViewState value) {
     _state = value;
     notifyListeners();
   }
 
-
-
-
-
   @override
   Future<UserModel?> createUserWithEmailAndPassword(
-      String email, String password, String userName) async {
+    String email,
+    String password,
+    String userName,
+  ) async {
     try {
       setViewState(ViewState.busy);
       _user = await _userRepository.createUserWithEmailAndPassword(
-          email, password, userName);
+        email,
+        password,
+        userName,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        throw ('The password provided is too weak.');
+        throw Exception('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        throw ('The account already exists for that email.');
+        throw Exception('The account already exists for that email.');
       }
     } finally {
       setViewState(ViewState.idle);
@@ -60,7 +61,7 @@ class UserNotifier extends ChangeNotifier implements AuthBase {
         return null;
       }
     } catch (e) {
-      throw ('currentUser $e');
+      throw Exception('currentUser $e');
     } finally {
       _state = ViewState.idle;
     }
@@ -68,7 +69,9 @@ class UserNotifier extends ChangeNotifier implements AuthBase {
 
   @override
   Future<UserModel> signWithEmaiAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       setViewState(ViewState.busy);
       _user = await _userRepository.signWithEmaiAndPassword(email, password);
@@ -76,14 +79,14 @@ class UserNotifier extends ChangeNotifier implements AuthBase {
       return _user ?? UserModel();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        throw ('No user found for that email.');
+        throw Exception('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        throw ('Wrong password provided for that user.');
+        throw Exception('Wrong password provided for that user.');
       }
     } finally {
       setViewState(ViewState.idle);
     }
-    throw ('signWithEmaiAndPassword');
+    throw Exception('signWithEmaiAndPassword');
   }
 
   @override
@@ -92,7 +95,7 @@ class UserNotifier extends ChangeNotifier implements AuthBase {
       setViewState(ViewState.busy);
       return _firebaseService.signOut();
     } catch (e) {
-      throw ('signOut $e');
+      throw Exception('signOut $e');
     } finally {
       setViewState(ViewState.idle);
     }

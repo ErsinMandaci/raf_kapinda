@@ -1,28 +1,17 @@
-
-
-import '../../core/services/product/product_service.dart';
-import '../../locator.dart';
-import '../../model/categories.dart';
-import '../../model/groceries.dart';
-import '../../model/products.dart';
-
+import 'package:groceries_app/core/services/product/product_service.dart';
+import 'package:groceries_app/locator_manager.dart';
+import 'package:groceries_app/model/groceries.dart';
+import 'package:kartal/kartal.dart';
 
 class ProductRepository {
-  final ProductService _productService = locator<ProductService>();
+  final ProductService _productService = LocatorManager.productService;
 
   Future<List<Groceries>>? getProduct() async {
-    final Map<String, dynamic> data = await _productService.fetchProduct();
+    final jsonData = await _productService.loadJson();
 
-    if (data.isNotEmpty) {
-      final List<dynamic> products = data['products'];
-      final List<dynamic> categories = data['categories'];
-
-      return [
-        Groceries(
-          products: products.map((e) => Products.fromJson(e)).toList(),
-          categories: categories.map((e) => Categories.fromJson(e)).toList(),
-        ),
-      ];
+    if (jsonData.categories.isNotNullOrEmpty &&
+        jsonData.products.isNotNullOrEmpty) {
+      return [jsonData];
     } else {
       return [];
     }

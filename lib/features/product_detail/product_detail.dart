@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
-
-import '../../core/constants/color.dart';
 
 class ProductDetailPage extends ConsumerWidget {
   const ProductDetailPage({super.key});
@@ -15,7 +14,7 @@ class ProductDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectItem = ref.watch(productProvider).selectedProducts;
-    var isLoading = ref.watch(productProvider).isLoading;
+    final isLoading = ref.watch(productProvider).isLoading;
     final isFavorite = ref
         .watch(productProvider)
         .favoriteIds
@@ -32,7 +31,7 @@ class ProductDetailPage extends ConsumerWidget {
         itemCount: selectItem.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,12 +55,13 @@ class ProductDetailPage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomSubTextWidget(
-                          text: selectItem[index].weight ?? 'not weight'),
+                        text: selectItem[index].weight ?? 'not weight',
+                      ),
                       IconButton(
                         onPressed: () {
                           ref
                               .read(productProvider)
-                              .setFavorite(selectItem[index]);
+                              .setFavoriteCard(selectItem[index]);
                         },
                         icon: Icon(
                           Icons.favorite,
@@ -78,7 +78,6 @@ class ProductDetailPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
                               onPressed: () => ref
@@ -117,8 +116,7 @@ class ProductDetailPage extends ConsumerWidget {
                           ],
                         ),
                         CustomTextWidget(
-                          text:
-                              '\$${ref.watch(productProvider).total.toString()}',
+                          text: '\$${ref.watch(productProvider).total}',
                           fontsize: 24,
                         ),
                       ],
@@ -149,20 +147,19 @@ class ProductDetailPage extends ConsumerWidget {
                     height: 40,
                   ),
                   Align(
-                    alignment: Alignment.center,
                     child: CustomElevatedButton(
                       text: 'Add To Basket',
                       onPressed: () {
                         if (isLoading == false) {
                           ref.read(productProvider).addBasket();
                           Fluttertoast.showToast(
-                            msg: "✔️ Ürün sepete eklendi!",
+                            msg: '✔️ Ürün sepete eklendi!',
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.TOP,
                             timeInSecForIosWeb: 0,
                             backgroundColor: ColorConst.primaryColor,
                             textColor: Colors.white,
-                            fontSize: 16.0,
+                            fontSize: 16,
                           );
                         } else {
                           return null;

@@ -42,7 +42,7 @@ class AccountPage extends ConsumerWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             const Divider(),
@@ -86,8 +86,8 @@ class AccountPage extends ConsumerWidget {
                       .then(
                         (value) => Navigator.pushNamed(context, 'login'),
                       )
-                      .catchError(
-                        (error) => 'Error when signing out: $error',
+                      // ignore: inference_failure_on_untyped_parameter
+                      .catchError((error) => 'Error when signing out: $error',
                       );
                 },
                 style: TextButton.styleFrom(),
@@ -106,15 +106,14 @@ class AccountPage extends ConsumerWidget {
 }
 
 class _AccountListItem extends StatelessWidget {
-  final String title;
-  final Widget icon;
-  final Function() onTap;
-
   const _AccountListItem({
     required this.title,
     required this.icon,
     required this.onTap,
   });
+  final String title;
+  final Widget icon;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {

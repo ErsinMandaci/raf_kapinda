@@ -1,16 +1,30 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UserModel with EquatableMixin {
-  String? userID;
-  String? email;
-  String? userName;
-  String? profilURL;
+part 'user_model.g.dart';
+
+@JsonSerializable()
+@immutable
+final class UserModel with EquatableMixin {
   UserModel({
-     this.userID,
-     this.email,
+    this.userID,
+    this.email,
     this.userName,
     this.profilURL,
   });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+final  String? userID;
+final  String? email;
+final  String? userName;
+final  String? profilURL;
+
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+
+  @override
+  List<Object?> get props => [userID, email, userName, profilURL];
 
   UserModel copyWith({
     String? userID,
@@ -23,27 +37,6 @@ class UserModel with EquatableMixin {
       email: email ?? this.email,
       userName: userName ?? this.userName,
       profilURL: profilURL ?? this.profilURL,
-    );
-  }
-
-  @override
-  List<Object?> get props => [userID, email, userName, profilURL];
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'userID': userID,
-      'email': email,
-      'userName': userName,
-      'profilURL': profilURL,
-    };
-  }
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      userID: map['userID'] != null ? map['userID'] as String : null,
-      email: map['email'] != null ? map['email'] as String : null,
-      userName: map['userName'] != null ? map['userName'] as String : null,
-      profilURL: map['profilURL'] != null ? map['profilURL'] as String : null,
     );
   }
 }

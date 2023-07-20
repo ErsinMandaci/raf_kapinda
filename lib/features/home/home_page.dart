@@ -5,10 +5,9 @@ import 'package:groceries_app/core/widgets/card/custom_card_widget.dart';
 import 'package:groceries_app/core/widgets/carousel_builder.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
+import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../provider/riverpod_management.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

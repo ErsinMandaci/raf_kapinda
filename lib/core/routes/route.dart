@@ -1,18 +1,17 @@
 //define routes here
 import 'package:flutter/cupertino.dart';
+import 'package:groceries_app/core/widgets/auth_widget/auth_checker_widget.dart';
+import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/features/account/account_item/orders_page.dart';
+import 'package:groceries_app/features/auth/landing_page.dart';
+import 'package:groceries_app/features/auth/log_in_page.dart';
 import 'package:groceries_app/features/auth/sign_in_page.dart';
 import 'package:groceries_app/features/auth/sign_up_page.dart';
 import 'package:groceries_app/features/explore/category_filter.dart';
 import 'package:groceries_app/features/explore/explore_page.dart';
-import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/features/home/home_page.dart';
 import 'package:groceries_app/features/onboarding/onboarding_view.dart';
 import 'package:groceries_app/features/product_detail/product_detail.dart';
-
-import '../../features/auth/landing_page.dart';
-import '../../features/auth/log_in_page.dart';
-import '../widgets/auth_widget/auth_checker_widget.dart';
 
 //Route name constants
 
@@ -53,14 +52,17 @@ Route<dynamic> controller(RouteSettings settings) {
       return CupertinoPageRoute(builder: (context) => ExplorePage());
     case detailPage:
       return CupertinoPageRoute(
-          builder: (context) => const ProductDetailPage());
+        builder: (context) => const ProductDetailPage(),
+      );
     case bottomPageBuilder:
       return CupertinoPageRoute(
-          builder: (context) => const BottomPageBuilder());
+        builder: (context) => const BottomPageBuilder(),
+      );
 
     case categoryFilter:
       return CupertinoPageRoute(
-          builder: (context) => const CategoryFilterPage());
+        builder: (context) => const CategoryFilterPage(),
+      );
 
     case orders:
       return CupertinoPageRoute(builder: (context) => const OrdersPage());

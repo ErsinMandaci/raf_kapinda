@@ -3,18 +3,19 @@ import 'package:groceries_app/core/constants/color.dart';
 import 'package:kartal/kartal.dart';
 
 class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
+    required this.labelText,
+    required this.hintText,
+    required this.onSaved,
+    super.key,
+    this.keyboardType,
+    this.obscureText,
+  });
   final String labelText;
   final String hintText;
-  final Function(String?)? onSaved;
+  final void Function(String?)? onSaved;
   final TextInputType? keyboardType;
   final bool? obscureText;
-  const CustomTextFormField(
-      {super.key,
-      required this.labelText,
-      required this.hintText,
-      required this.onSaved,
-      this.keyboardType,
-      this.obscureText});
 
   @override
   Widget build(BuildContext context) {

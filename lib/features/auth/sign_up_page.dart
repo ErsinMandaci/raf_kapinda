@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/enums/image_enums.dart';
-import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_form_text.dart';
+import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
+import 'package:groceries_app/features/provider/riverpod_management.dart';
+import 'package:groceries_app/model/user_model.dart';
 import 'package:kartal/kartal.dart';
-
-import '../../model/user_model.dart';
-import '../provider/riverpod_management.dart';
 
 // ignore: must_be_immutable
 class SignUpPage extends ConsumerWidget {
@@ -26,17 +25,20 @@ class SignUpPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final watch = ref.watch(userProvider);
 
-    formSubmit() async {
+    Future<void> formSubmit() async {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState?.save();
         UserModel(userName: _userName);
         try {
           await watch
               .createUserWithEmailAndPassword(
-                  _email ?? '', _password ?? '', _userName ?? '')
+                _email ?? '',
+                _password ?? '',
+                _userName ?? '',
+              )
               .then((value) => Navigator.pushNamed(context, 'login'));
         } catch (e) {
-          debugPrint('createUserWithEmailAndPassword ${e.toString()} signUp');
+          throw Exception('createUserWithEmailAndPassword $e signUp');
         }
       }
     }
@@ -68,8 +70,8 @@ class SignUpPage extends ConsumerWidget {
                     const Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: CustomSubTextWidget(
-                          color: null,
-                          text: 'Enter your credentials to continue'),
+                        text: 'Enter your credentials to continue',
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
@@ -109,10 +111,11 @@ class SignUpPage extends ConsumerWidget {
                     ),
                     Center(
                       child: CustomElevatedButton(
-                          text: 'Sing Up',
-                          onPressed: () {
-                            formSubmit();
-                          }),
+                        text: 'Sing Up',
+                        onPressed: () {
+                          formSubmit();
+                        },
+                      ),
                     ),
                     SizedBox(height: context.dynamicHeight(0.02)),
                     Center(

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/features/explore/explore_page.dart';
+import 'package:groceries_app/features/home/home_page.dart';
 import 'package:kartal/kartal.dart';
-
-import '../../core/constants/color.dart';
-import '../explore/explore_page.dart';
-import 'home_page.dart';
 
 class NavigatorBottom extends StatefulWidget {
   const NavigatorBottom({super.key});
@@ -14,7 +13,7 @@ class NavigatorBottom extends StatefulWidget {
 
 int currentIndex = 0;
 
-final pages = [const HomePage(),  ExplorePage()];
+final pages = [const HomePage(), ExplorePage()];
 
 class _NavigatorBottomState extends State<NavigatorBottom> {
   @override
@@ -28,7 +27,6 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
           backgroundColor: Colors.white,
           selectedItemColor: ColorConst.primaryColor,
           unselectedItemColor: Colors.black,
-          selectedFontSize: 14,
           unselectedFontSize: 14,
           onTap: (value) {
             setState(() {

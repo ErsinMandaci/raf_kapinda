@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../features/provider/riverpod_management.dart';
-import '../../../model/products.dart';
-
-import '../../constants/color.dart';
+import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/features/provider/riverpod_management.dart';
+import 'package:groceries_app/model/products.dart';
 
 class CustomAddButton extends ConsumerWidget {
+  const CustomAddButton({required this.products, super.key});
   final Products products;
-  const CustomAddButton({super.key, required this.products});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

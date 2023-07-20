@@ -1,16 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-
+import 'package:flutter/material.dart';
 import 'package:groceries_app/model/products.dart';
 
-class Orders with EquatableMixin {
-  String? orderId;
-  String? userId;
-  String? orderNumber;
-  DateTime? createdAt;
-  List<Products>? products;
+@immutable
+final class Orders with EquatableMixin {
+  final String? orderId;
+  final String? userId;
+  final String? orderNumber;
+  final DateTime? createdAt;
+  final List<Products>? products;
 
   Orders({
     this.orderId,
