@@ -1,14 +1,13 @@
 import 'package:groceries_app/features/repository/firestore_repository.dart';
-import 'package:groceries_app/locator.dart';
+import 'package:groceries_app/locator_manager.dart';
 
-import '../../../model/orders.dart';
-import '../../../model/products.dart';
-import '../../../model/user_model.dart';
-
+import 'package:groceries_app/model/orders.dart';
+import 'package:groceries_app/model/products.dart';
+import 'package:groceries_app/model/user_model.dart';
 
 class FirestoreService {
   final FirestoreRepository _firestoreRepository =
-      locator<FirestoreRepository>();
+      LocatorManager.firestoreRepository;
 
   Future<bool> addUser(UserModel user) {
     if (user.userID == null) {
@@ -19,8 +18,8 @@ class FirestoreService {
 
   Future<List<Orders>> getOrders() async {
     final ordersCollection = _firestoreRepository.getOrders();
-        
-      return ordersCollection;
+
+    return ordersCollection;
   }
 
   Future<void> pushBasketDataToFirestore(List<Products> basketProducts) {

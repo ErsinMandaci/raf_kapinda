@@ -1,5 +1,5 @@
-class StringConst {
-
+final class StringConst {
+  StringConst._();
   //json
   static const String jsonProduct = 'assets/json/groceries.json';
 

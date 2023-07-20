@@ -18,20 +18,23 @@ class OrdersPage extends ConsumerWidget {
       body: ListView.builder(
         itemCount: userOrders.length,
         itemBuilder: (context, index) {
-          var userOrdersIndex = userOrders[index];
+          final userOrdersIndex = userOrders[index];
 
           return Card(
             elevation: 10,
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: CustomTextWidget(
-                      fontsize: 12, text: ' ${userOrdersIndex.orderNumber}'),
+                    fontsize: 12,
+                    text: ' ${userOrdersIndex.orderNumber}',
+                  ),
                 ),
                 CustomTextWidget(
-                    fontsize: 12,
-                    text: 'Order Date: ${userOrdersIndex.formattedCreatedAt}'),
+                  fontsize: 12,
+                  text: 'Order Date: ${userOrdersIndex.formattedCreatedAt}',
+                ),
                 Column(
                   children: userOrdersIndex.products!.map((product) {
                     return ListTile(
@@ -48,7 +51,9 @@ class OrdersPage extends ConsumerWidget {
                         children: [
                           Text('Piece: ${product.quantity}'),
                           Text(
-                              'Total \$${(product.price ?? 0 * product.quantity!).roundToDouble()}'),
+                            'Total \$${(product.price ?? 0 * product.quantity!).
+                            roundToDouble()}',
+                          ),
                         ],
                       ),
                     );

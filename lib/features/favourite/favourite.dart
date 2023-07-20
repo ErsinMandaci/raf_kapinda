@@ -35,8 +35,9 @@ class FavouritePage extends ConsumerWidget {
                       ref
                           .read(productProvider)
                           .selectedItem(favProduct[index])
-                          .then((value) =>
-                              Navigator.pushNamed(context, 'detail'));
+                          .then(
+                            (value) => Navigator.pushNamed(context, 'detail'),
+                          );
                     },
                     leading: Image.network(favProduct[index].imageUrl ?? ''),
                     title: CustomTextWidget(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/constants/string.dart';
+import 'package:groceries_app/core/enums/image_enums.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
-import '../../core/enums/image_enums.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});

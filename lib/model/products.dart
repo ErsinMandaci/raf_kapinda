@@ -1,16 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Products with EquatableMixin {
-  int? id;
-  String? name;
-  double? price;
-  int? stock;
-  String? description;
-  String? imageUrl;
-  int? quantity;
-  int? categoryId;
-  String? weight;
+part 'products.g.dart';
 
+@JsonSerializable()
+@immutable
+final class Products with EquatableMixin {
   Products({
     this.id,
     this.name,
@@ -21,11 +17,21 @@ class Products with EquatableMixin {
     this.quantity,
     this.categoryId,
     this.weight,
-   
   });
 
-  String get formattedPrice => price != null ? price!.toStringAsFixed(2) : '0.00';
+  factory Products.fromJson(Map<String, dynamic> json) =>
+      _$ProductsFromJson(json);
+final int? id;
+final String? name;
+final double? price;
+final int? stock;
+final String? description;
+final String? imageUrl;
+final int? quantity;
+final int? categoryId;
+final String? weight;
 
+  Map<String, dynamic> toJson() => _$ProductsToJson(this);
 
   @override
   List<Object?> get props => [
@@ -63,34 +69,4 @@ class Products with EquatableMixin {
       weight: weight ?? this.weight,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'price': price,
-      'stock': stock,
-      'description': description,
-      'imageUrl': imageUrl,
-      'quantity': quantity,
-      'categoryId': categoryId,
-      'weight': weight,
-    };
-  }
-
-  factory Products.fromJson(Map<String, dynamic> json) {
-    return Products(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      price: (json['price'] as num?)?.toDouble(),
-      stock: json['stock'] as int?,
-      description: json['description'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      quantity: json['quantity'] as int?,
-      categoryId: json['categoryId'] as int?,
-      weight: json['weight'] as String?,
-    );
-  }
-
-  toMap() {}
 }

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/features/repository/product_repository.dart';
-import 'package:groceries_app/locator.dart';
-
-import '../../model/categories.dart';
-import '../../model/groceries.dart';
-import '../../model/products.dart';
+import 'package:groceries_app/locator_manager.dart';
+import 'package:groceries_app/model/categories.dart';
+import 'package:groceries_app/model/groceries.dart';
+import 'package:groceries_app/model/products.dart';
 
 class ProductNotifier extends ChangeNotifier {
-  final ProductRepository _productRepository = locator<ProductRepository>();
-  // final FirestoreRepository _firestoreRepository = locator<FirestoreRepository>();
+  final ProductRepository _productRepository = LocatorManager.productRepository;
 
   final List<Products> products = [];
   final List<Categories> categories = [];
@@ -32,7 +30,7 @@ class ProductNotifier extends ChangeNotifier {
 
   List<Products> onCategorySelected(Categories category) {
     filterCategory.clear();
-    List<Products> filterProduct = products
+    final filterProduct = products
         .where((element) => element.categoryId == category.id)
         .toSet()
         .toList();
@@ -52,7 +50,7 @@ class ProductNotifier extends ChangeNotifier {
     return [];
   }
 
-  setFavorite(Products products) {
+  void setFavoriteCard(Products products) {
     if (favoriteIds.contains(products.id.toString())) {
       favoriteIds.remove(products.id.toString());
     } else {
@@ -67,49 +65,72 @@ class ProductNotifier extends ChangeNotifier {
         .toList();
   }
 
-  String totalPrice(Products product) {
-    total = product.price! * product.quantity!;
+  double basketTotalPrice(Products product) {
+    total = (product.price ?? 0) * (product.quantity ?? 0);
     notifyListeners();
-    return total.toStringAsFixed(2);
+    return total;
+  }
+
+  int increaseQuantity(Products product) {
+    notifyListeners();
+    return (product.quantity ?? 0) + 1;
+    
+  }
+
+  int decreaseQuantity(Products product) {
+    notifyListeners();
+    return (product.quantity ?? 0) - 1;
   }
 
   void counterIncrement(Products product) {
     if (product.quantity != null && product.quantity! < 15) {
-      product.quantity = (product.quantity! + counter).clamp(0, 15);
-      totalPrice(product);
+      increaseQuantity(product);
+      basketTotalPrice(product);
     }
     notifyListeners();
   }
 
   void counterDecrement(Products product) {
     if (product.quantity != null && product.quantity! > 1) {
-      product.quantity = (product.quantity! - counter).clamp(1, 15);
-      totalPrice(product);
+      decreaseQuantity(product);
+      basketTotalPrice(product);
     }
     notifyListeners();
   }
-  
+
+  int getNewQuantity(Products product) {
+    if (product.quantity == null) {
+      return 1;
+    }
+    return product.quantity! + 1;
+  }
 
   List<Products> addBasket() {
     isLoading = true;
-
     notifyListeners();
+
     if (selectedProducts.isNotEmpty) {
-      int existingProductIndex =
+      final existingProductIndex =
           basketProducts.indexWhere((p) => p.id == selectedProducts.first.id);
 
       if (existingProductIndex != -1) {
-        basketProducts[existingProductIndex].quantity =
-            selectedProducts.first.quantity!;
+        int newQuantity = getNewQuantity(selectedProducts.first);
+        Products updatedProduct = Products(
+          id: basketProducts[existingProductIndex].id,
+          name: basketProducts[existingProductIndex].name,
+          price: basketProducts[existingProductIndex].price,
+          quantity: newQuantity,
+        );
+        basketProducts[existingProductIndex] = updatedProduct;
       } else {
         basketProducts.addAll(selectedProducts);
       }
 
       notifyListeners();
     }
+
     Future.delayed(const Duration(seconds: 4), () {
       isLoading = false;
-   
       notifyListeners();
     });
 
@@ -133,7 +154,7 @@ class ProductNotifier extends ChangeNotifier {
   }
 
   double getBasketPrice(Products product) {
-    double priceBasket = product.price! * product.quantity!;
+    final priceBasket = product.price! * product.quantity!;
     return priceBasket;
   }
 
@@ -141,11 +162,14 @@ class ProductNotifier extends ChangeNotifier {
     selectedProducts.clear();
     counter = 1;
     if (products.isNotEmpty) {
-      selectedProducts.addAll(products
-          .where((element) => element.id.toString() == selected.id.toString()));
+      selectedProducts.addAll(
+        products.where(
+          (element) => element.id.toString() == selected.id.toString(),
+        ),
+      );
       notifyListeners();
     }
-    totalPrice(selected);
+    basketTotalPrice(selected);
     return selectedProducts.first;
   }
 

@@ -16,10 +16,7 @@ class _PageBuilderState extends State<PageBuilder> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-      initialPage: 0,
-      viewportFraction: 1,
-    );
+    _pageController = PageController();
   }
 
   @override
@@ -57,7 +54,6 @@ class _PageBuilderState extends State<PageBuilder> {
           height: context.dynamicHeight(0.2),
           child: PageView.builder(
             itemCount: images.length,
-            pageSnapping: true,
             controller: _pageController,
             onPageChanged: (page) {
               setState(() {

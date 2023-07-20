@@ -2,21 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
-import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_form_text.dart';
+import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
+import 'package:groceries_app/features/provider/user_provider.dart';
 import 'package:kartal/kartal.dart';
-
-import '../provider/user_provider.dart';
 
 final _userProvider = ChangeNotifierProvider<UserNotifier>((ref) {
   return UserNotifier();
 });
 
 class LogInPage extends ConsumerWidget {
-  final _formKey = GlobalKey<FormState>();
   LogInPage({super.key});
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +24,7 @@ class LogInPage extends ConsumerWidget {
 
     final watch = ref.read(_userProvider);
 
-    formSubmit() async {
+    Future<void> formSubmit() async {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState?.save();
         await watch.signWithEmaiAndPassword(email ?? '', password ?? '').then(
@@ -63,7 +62,8 @@ class LogInPage extends ConsumerWidget {
                     const Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: CustomSubTextWidget(
-                          color: null, text: 'Enter your emails and password'),
+                        text: 'Enter your emails and password',
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
@@ -86,7 +86,6 @@ class LogInPage extends ConsumerWidget {
                               },
                               labelText: 'Password',
                               hintText: 'Enter your password',
-                              keyboardType: null,
                             )
                           ],
                         ),
@@ -97,10 +96,11 @@ class LogInPage extends ConsumerWidget {
                     ),
                     Center(
                       child: CustomElevatedButton(
-                          text: 'Log In',
-                          onPressed: () {
-                            formSubmit();
-                          }),
+                        text: 'Log In',
+                        onPressed: () {
+                          formSubmit();
+                        },
+                      ),
                     ),
                     SizedBox(height: context.dynamicHeight(0.02)),
                     Center(

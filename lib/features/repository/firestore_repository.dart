@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/services/firestore/firestore_base.dart';
+import 'package:groceries_app/model/orders.dart';
+import 'package:groceries_app/model/products.dart';
+import 'package:groceries_app/model/user_model.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../model/orders.dart';
-import '../../model/products.dart';
-import '../../model/user_model.dart';
 
 class FirestoreRepository implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -14,11 +13,11 @@ class FirestoreRepository implements DBBase {
 
   @override
   Future<bool> addUser(UserModel user) async {
-    DocumentSnapshot readUser =
-        await _firestore.doc("users/${user.userID}").get();
+    final DocumentSnapshot readUser =
+        await _firestore.doc('users/${user.userID}').get();
 
     if (!readUser.exists) {
-      await _firestore.collection("users").doc(user.userID).set({
+      await _firestore.collection('users').doc(user.userID).set({
         'userName': user.userName,
         'email': user.email,
         'userID': user.userID,
@@ -26,45 +25,43 @@ class FirestoreRepository implements DBBase {
       return true;
     } else {
       debugPrint(
-          'Kullanici zaten veritabanında var  (Add User FirestoreDBService))');
+        'Kullanici zaten veritabanında var  (Add User FirestoreDBService))',
+      );
       return false;
     }
   }
 
   @override
   Future<List<Orders>> getOrders() async {
-    var uuid = const Uuid();
-    CollectionReference<Map<String, dynamic>> orderCollection =
-        _firestore.collection('orders');
+    const uuid = Uuid();
+    final orderCollection = _firestore.collection('orders');
 
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    final querySnapshot =
         await orderCollection.where('userId', isEqualTo: _user?.uid).get();
 
-    List<Orders> orders = [];
+    final orders = <Orders>[];
 
-    for (var document in querySnapshot.docs) {
-      List<dynamic> productsData = document.data()['products'];
-   
+    for (final document in querySnapshot.docs) {
+      final productsData = document.data()['products'] as Map<String, dynamic>;
 
-      List<Products> products = productsData.map((productData) {
+      final products = productsData.entries.map((entry) {
+        final productData = entry.value as Map<String, dynamic>;
         return Products(
-          id: productData['id'],
-          name: productData['name'],
-          price: productData['price'],
-          imageUrl: productData['imageUrl'],
-          quantity: productData['quantity'],
+          id: productData['id'] as int,
+          name: productData['name'] as String,
+          price: productData['price'] as double,
+          imageUrl: productData['imageUrl'] as String,
+          quantity: productData['quantity'] as int,
         );
       }).toList();
-      var createdAtTimestamp = document.data()['createdAt'];
-      DateTime createdAt =
-          DateTime.fromMillisecondsSinceEpoch(createdAtTimestamp);
 
+      final createdAtTimestamp = document.data()['createdAt'];
+      final createdAt =
+          DateTime.fromMillisecondsSinceEpoch(createdAtTimestamp as int);
 
-
-
-      Orders order = Orders(
+      final order = Orders(
         orderId: document.id,
-        userId: document.data()['userId'],
+        userId: document.data()['userId'] as String,
         orderNumber: uuid.v4(),
         createdAt: createdAt,
         products: products,
@@ -78,11 +75,10 @@ class FirestoreRepository implements DBBase {
 
   @override
   Future<void> pushBasketDataToFirestore(List<Products> basketProducts) async {
-       var uuid = const Uuid();
-    DocumentReference<Map<String, dynamic>> orderCollection =
-        _firestore.collection('orders').doc();
+    const uuid = Uuid();
+    final orderCollection = _firestore.collection('orders').doc();
 
-    Orders orders = Orders(
+    final orders = Orders(
       orderId: orderCollection.id,
       userId: _user?.uid ?? '',
       orderNumber: uuid.v4(),
@@ -94,12 +90,12 @@ class FirestoreRepository implements DBBase {
   }
 
   @override
-  @override
   Future<UserModel> readUser(String userID) async {
-    DocumentSnapshot snapshot =
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection('users').doc(userID).get();
-    return snapshot.exists
-        ? UserModel.fromMap(snapshot.data() as Map<String, dynamic>)
-        : UserModel();
+    if (snapshot.data() == null) return UserModel();
+
+    UserModel _userModel = new UserModel.fromJson(snapshot.data()!);
+    return _userModel;
   }
 }

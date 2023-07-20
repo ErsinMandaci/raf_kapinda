@@ -1,15 +1,25 @@
 import 'package:equatable/equatable.dart';
-import 'products.dart';
-import 'categories.dart';
+import 'package:flutter/material.dart';
+import 'package:groceries_app/model/categories.dart';
+import 'package:groceries_app/model/products.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Groceries with EquatableMixin {
-  List<Products>? products;
-  List<Categories>? categories;
+part 'groceries.g.dart';
 
+@JsonSerializable()
+@immutable
+final class Groceries with EquatableMixin {
   Groceries({
     this.products,
     this.categories,
   });
+
+  factory Groceries.fromJson(Map<String, dynamic> json) =>
+      _$groceriesFromJson(json);
+ final List<Products>? products;
+  final List<Categories>? categories;
+
+  Map<String, dynamic> toJson() => _$groceriesToJson(this);
 
   @override
   List<Object?> get props => [products, categories];
@@ -21,24 +31,6 @@ class Groceries with EquatableMixin {
     return Groceries(
       products: products ?? this.products,
       categories: categories ?? this.categories,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'products': products,
-      'categories': categories,
-    };
-  }
-
-  factory Groceries.fromJson(Map<String, dynamic> json) {
-    return Groceries(
-      products: (json['products'] as List<dynamic>?)
-          ?.map((e) => Products.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      categories: (json['categories'] as List<dynamic>?)
-          ?.map((e) => Categories.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
   }
 }

@@ -32,16 +32,18 @@ class CategoryFilterPage extends ConsumerWidget {
           final filtProduct = filtCategory[index];
           if (filtProduct.imageUrl == null) {
             return const Center(
-                child: CircularProgressIndicator(
-              color: ColorConst.primaryColor,
-            ));
+              child: CircularProgressIndicator(
+                color: ColorConst.primaryColor,
+              ),
+            );
           }
           return CustomCard(
-              imageUrl: filtProduct.imageUrl,
-              name: filtProduct.name,
-              weigth: filtProduct.weight,
-              price: '\$${filtProduct.price}',
-              products: filtProduct);
+            imageUrl: filtProduct.imageUrl,
+            name: filtProduct.name,
+            weigth: filtProduct.weight,
+            price: '\$${filtProduct.price}',
+            products: filtProduct,
+          );
         },
       ),
     );

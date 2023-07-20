@@ -6,9 +6,8 @@ import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
+import 'package:groceries_app/model/products.dart';
 import 'package:kartal/kartal.dart';
-
-import '../../model/products.dart';
 
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
@@ -16,7 +15,7 @@ class CartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final basketProducts = ref.watch(productProvider).basketProducts;
-
+  
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: context.dynamicHeight(0.1),
@@ -31,9 +30,7 @@ class CartPage extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             )
-          : SizedBox(
-              height: double.infinity,
-              width: double.infinity,
+          : SizedBox.expand(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -42,14 +39,15 @@ class CartPage extends ConsumerWidget {
                       shrinkWrap: true,
                       itemCount: basketProducts.length,
                       itemBuilder: (context, index) {
-                        var basketIndex = basketProducts[index];
+                        final basketIndex = basketProducts[index];
                         return ListTile(
                           visualDensity: const VisualDensity(vertical: 4),
                           leading: Image.network(
-                              basketIndex.imageUrl ?? 'not image',
-                              width: context.dynamicWidth(0.2),
-                              height: context.dynamicHeight(0.1),
-                              fit: BoxFit.fill),
+                            basketIndex.imageUrl ?? 'not image',
+                            width: context.dynamicWidth(0.2),
+                            height: context.dynamicHeight(0.1),
+                            fit: BoxFit.fill,
+                          ),
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -98,10 +96,12 @@ class CartPage extends ConsumerWidget {
                                 ],
                               ),
                               CustomTextWidget(
-                                  fontWeight: FontWeight.w600,
-                                  fontsize: 16,
-                                  text:
-                                      '\$${ref.read(productProvider).getBasketPrice(basketProducts[index])}'),
+                                fontWeight: FontWeight.w600,
+                                fontsize: 16,
+                                text:
+                                    '\$${ref.read(productProvider).
+                                    getBasketPrice(basketProducts[index])}',
+                              ),
                             ],
                           ),
                         );
@@ -124,7 +124,7 @@ class CartPage extends ConsumerWidget {
                           ),
                         ),
                         onPressed: () {
-                          showModalBottomSheet(
+                          showModalBottomSheet<Widget>(
                             context: context,
                             backgroundColor: Colors.transparent,
                             builder: (context) {
@@ -144,7 +144,8 @@ class CartPage extends ConsumerWidget {
                                         const ListTile(
                                           contentPadding: EdgeInsets.all(30),
                                           leading: CustomSubTextWidget(
-                                              text: 'Delivery'),
+                                            text: 'Delivery',
+                                          ),
                                           trailing: SizedBox(
                                             width: 200,
                                             height: 100,
@@ -164,7 +165,8 @@ class CartPage extends ConsumerWidget {
                                         const ListTile(
                                           contentPadding: EdgeInsets.all(30),
                                           leading: CustomSubTextWidget(
-                                              text: 'Payment'),
+                                            text: 'Payment',
+                                          ),
                                           trailing: Icon(Icons.credit_card),
                                         ),
                                         const Divider(
@@ -174,11 +176,13 @@ class CartPage extends ConsumerWidget {
                                           contentPadding:
                                               const EdgeInsets.all(30),
                                           leading: const CustomSubTextWidget(
-                                              text: 'Total Cost'),
+                                            text: 'Total Cost',
+                                          ),
                                           trailing: CustomTextWidget(
-                                              fontsize: 18,
-                                              text:
-                                                  '\$${ref.read(productProvider).totalCardPrice}'),
+                                            fontsize: 18,
+                                            text:
+                                                '\$${ref.read(productProvider).totalCardPrice}',
+                                          ),
                                         ),
                                         const Divider(
                                           color: Colors.black,
@@ -189,24 +193,34 @@ class CartPage extends ConsumerWidget {
                                               ref
                                                   .read(firestoreProvider)
                                                   .pushBasketDataToFirestore(
-                                                      basketProducts)
-                                                  .then((value) =>
-                                                      basketProducts.clear())
-                                                  .then((value) => Navigator
-                                                      .pushAndRemoveUntil(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const BottomPageBuilder()),
-                                                          (route) => false));
+                                                    basketProducts,
+                                                  )
+                                                  .then(
+                                                    (value) =>
+                                                        basketProducts.clear(),
+                                                  )
+                                                  .then(
+                                                    (value) => Navigator
+                                                        .pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute<Widget>(
+                                                        builder: (context) =>
+                                                            const BottomPageBuilder(),
+                                                      ),
+                                                      (route) => false,
+                                                    ),
+                                                  );
 
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                backgroundColor:
-                                                    ColorConst.primaryColor,
-                                                content:
-                                                    Text('Siparişiniz alındı.'),
-                                              ));
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  backgroundColor:
+                                                      ColorConst.primaryColor,
+                                                  content: Text(
+                                                    'Siparişiniz alındı.',
+                                                  ),
+                                                ),
+                                              );
                                             },
                                             text: 'Place Order',
                                           ),
@@ -229,7 +243,8 @@ class CartPage extends ConsumerWidget {
                               width: 50,
                               height: 30,
                               child: Text(
-                                  '\$${ref.watch(productProvider).cardPrice()}'),
+                                '\$${ref.watch(productProvider).cardPrice()}',
+                              ),
                             )
                           ],
                         ),
@@ -254,7 +269,7 @@ class _CustomAlertDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       onPressed: () {
-        showDialog(
+        showDialog<Widget>(
           context: context,
           builder: (context) {
             return AlertDialog(

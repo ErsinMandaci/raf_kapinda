@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/widgets/card/custom_button_card.dart';
+import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
+import 'package:groceries_app/core/widgets/custom_text_widget.dart';
+import 'package:groceries_app/model/products.dart';
 import 'package:kartal/kartal.dart';
 
-import '../../../model/products.dart';
-
-import '../custom_sub_text_widget.dart';
-import '../custom_text_widget.dart';
-
 class CustomCard extends StatelessWidget {
+  const CustomCard({
+    required this.imageUrl,
+    required this.name,
+    required this.weigth,
+    required this.price,
+    required this.products,
+    super.key,
+  });
   final String? imageUrl;
   final String? name;
   final String? weigth;
   final String? price;
   final Products products;
-
-  const CustomCard(
-      {super.key,
-      required this.imageUrl,
-      required this.name,
-      required this.weigth,
-      required this.price,
-      required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class CustomCard extends StatelessWidget {
         width: context.dynamicWidth(0.4),
         height: context.dynamicHeight(0.25),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,

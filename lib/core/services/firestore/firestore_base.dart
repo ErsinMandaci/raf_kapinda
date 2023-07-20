@@ -1,8 +1,6 @@
-
-
-import '../../../model/orders.dart';
-import '../../../model/products.dart';
-import '../../../model/user_model.dart';
+import 'package:groceries_app/model/orders.dart';
+import 'package:groceries_app/model/products.dart';
+import 'package:groceries_app/model/user_model.dart';
 
 abstract class DBBase {
   Future<bool> addUser(UserModel user);

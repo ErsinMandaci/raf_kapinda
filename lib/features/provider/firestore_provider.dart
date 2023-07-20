@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/services/firestore/firestore_service.dart';
-import 'package:groceries_app/locator.dart';
+import 'package:groceries_app/locator_manager.dart';
 
-import '../../model/orders.dart';
-import '../../model/products.dart';
+import 'package:groceries_app/model/orders.dart';
+import 'package:groceries_app/model/products.dart';
 
 class FirestoreNotifer extends ChangeNotifier {
-  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FirestoreService _firestoreService = LocatorManager.firestoreService;
 
   final List<Orders> orderList = [];
 
@@ -25,7 +25,8 @@ class FirestoreNotifer extends ChangeNotifier {
     if (orders.isNotEmpty) {
       orderList.addAll(orders);
       orderList.sort(
-          (a, b) => b.createdAt?.compareTo(a.createdAt ?? DateTime.now()) ?? 0);
+        (a, b) => b.createdAt?.compareTo(a.createdAt ?? DateTime.now()) ?? 0,
+      );
     } else {
       debugPrint('Sipariş yok');
     }

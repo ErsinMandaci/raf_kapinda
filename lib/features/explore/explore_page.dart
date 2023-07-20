@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/widgets/card/custom_card_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
+import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
-import '../provider/riverpod_management.dart';
-
 class ExplorePage extends ConsumerWidget {
-  final TextEditingController _searchController = TextEditingController();
   ExplorePage({super.key});
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,11 +36,12 @@ class ExplorePage extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final seacrhIndex = search[index];
                   return CustomCard(
-                      imageUrl: seacrhIndex.imageUrl,
-                      name: seacrhIndex.name,
-                      weigth: seacrhIndex.weight.toString(),
-                      price: seacrhIndex.price.toString(),
-                      products: seacrhIndex);
+                    imageUrl: seacrhIndex.imageUrl,
+                    name: seacrhIndex.name,
+                    weigth: seacrhIndex.weight.toString(),
+                    price: seacrhIndex.price.toString(),
+                    products: seacrhIndex,
+                  );
                 },
               ),
             )
@@ -79,9 +79,10 @@ class ExplorePage extends ConsumerWidget {
                             height: 120,
                           ),
                           CustomTextWidget(
-                              fontWeight: FontWeight.bold,
-                              fontsize: 16,
-                              text: category[index].name ?? '')
+                            fontWeight: FontWeight.bold,
+                            fontsize: 16,
+                            text: category[index].name ?? '',
+                          )
                         ],
                       ),
                     ),
@@ -106,8 +107,8 @@ class ExplorePage extends ConsumerWidget {
 }
 
 class _SearchTextField extends ConsumerStatefulWidget {
-  final TextEditingController searchController;
   const _SearchTextField({required this.searchController});
+  final TextEditingController searchController;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
