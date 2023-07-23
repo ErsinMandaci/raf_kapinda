@@ -3,8 +3,6 @@
 
 
 
-
-
 ## Getting Started
 
 <div>
