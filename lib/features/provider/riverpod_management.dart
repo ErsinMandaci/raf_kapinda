@@ -10,12 +10,10 @@ final userProvider = ChangeNotifierProvider<UserNotifier>((ref) {
   return UserNotifier();
 });
 
-
-final productProvider = ChangeNotifierProvider<ProductNotifier>((ref) {
+final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
   return ProductNotifier();
 });
 
-
-final  firestoreProvider = ChangeNotifierProvider<FirestoreNotifer>((ref) {
-  return FirestoreNotifer();
+final firestoreProvider = StateNotifierProvider<FirestoreNotifier, FirestoreState>((ref) {
+  return FirestoreNotifier();
 });

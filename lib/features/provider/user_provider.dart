@@ -8,7 +8,7 @@ import 'package:groceries_app/model/user_model.dart';
 
 enum ViewState { idle, busy }
 
-class UserNotifier extends ChangeNotifier implements AuthBase {
+final class UserNotifier extends ChangeNotifier implements AuthBase {
   final UserRepository _userRepository = LocatorManager.userRepository;
   final FirebaseAuthService _firebaseService = LocatorManager.firebaseAuth;
 
