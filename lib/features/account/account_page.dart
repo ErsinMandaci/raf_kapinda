@@ -9,7 +9,7 @@ import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
 @RoutePage()
-class AccountPage extends ConsumerWidget {
+final class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
 
   @override
