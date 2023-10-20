@@ -3,6 +3,7 @@
         {
             "id": 1,
             "name": "Apple",
+            "isFavorite": true,
             "price": 2.5,
             "stock": 100,
             "description": "Fresh and delicious apple.",
@@ -14,6 +15,7 @@
         {
             "id": 2,
             "name": "Pear",
+            "isFavorite": false,
             "price": 3.5,
             "stock": 50,
             "description": "Satisfying and healthy pear.",
@@ -25,6 +27,7 @@
         {
             "id": 3,
             "name": "Banana",
+            "isFavorite": true,
             "price": 1.5,
             "stock": 75,
             "description": "Energizing and nutritious banana.",
@@ -36,6 +39,7 @@
         {
             "id": 4,
             "name": "Orange",
+            "isFavorite": false,
             "price": 2.5,
             "stock": 120,
             "description": "Vitamin-packed orange.",
@@ -47,6 +51,7 @@
         {
             "id": 5,
             "name": "Strawberry",
+            "isFavorite": true,
             "price": 4.5,
             "stock": 30,
             "description": "Sweet and flavorful strawberry.",
@@ -58,6 +63,7 @@
         {
             "id": 6,
             "name": "Water",
+            "isFavorite": false,
             "price": 1.0,
             "stock": 200,
             "description": "Refreshing bottled water.",
@@ -69,6 +75,7 @@
         {
             "id": 7,
             "name": "Orange Juice",
+            "isFavorite": true,
             "price": 5.0,
             "stock": 50,
             "description": "Freshly squeezed orange juice.",
@@ -80,6 +87,7 @@
         {
             "id": 8,
             "name": "Carrot",
+            "isFavorite": false,
             "price": 2.0,
             "stock": 80,
             "description": "Nutritious and crunchy carrot.",
@@ -91,6 +99,7 @@
         {
             "id": 9,
             "name": "Cucumber",
+            "isFavorite": true,
             "price": 1.2,
             "stock": 60,
             "description": "Cool and refreshing cucumber.",
@@ -102,6 +111,7 @@
         {
             "id": 10,
             "name": "Tomato",
+            "isFavorite": false,
             "price": 1.8,
             "stock": 70,
             "description": "Juicy and flavorful tomato.",
@@ -113,6 +123,7 @@
         {
             "id": 11,
             "name": "Coffee",
+            "isFavorite": true,
             "price": 3.99,
             "stock": 50,
             "description": "Rich and aromatic coffee.",
@@ -124,6 +135,7 @@
         {
             "id": 12,
             "name": "Tea",
+            "isFavorite": false,
             "price": 2.5,
             "stock": 80,
             "description": "Refreshing and soothing tea.",
@@ -135,6 +147,7 @@
         {
             "id": 13,
             "name": "Apple Juice",
+            "isFavorite": true,
             "price": 4.5,
             "stock": 30,
             "description": "Freshly squeezed orange juice.",
@@ -146,6 +159,7 @@
         {
             "id": 14,
             "name": "Coke",
+            "isFavorite": false,
             "price": 2.99,
             "stock": 70,
             "description": "Classic cola beverage.",
@@ -157,6 +171,7 @@
         {
             "id": 15,
             "name": "Pepsi",
+            "isFavorite": true,
             "price": 2.75,
             "stock": 60,
             "description": "Refreshing cola drink.",
@@ -168,6 +183,7 @@
         {
             "id": 16,
             "name": "Coca Cola",
+            "isFavorite": false,
             "price": 3.25,
             "stock": 40,
             "description": "World-famous cola beverage.",
