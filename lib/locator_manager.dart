@@ -14,6 +14,7 @@ final class LocatorManager {
   LocatorManager._();
   final GetIt _locator = GetIt.instance;
   static final LocatorManager _instance = LocatorManager._();
+
   static LocatorManager get instance => _instance;
   void _getItLocator() {
     _locator.registerLazySingleton(FirebaseAuthService.new);
@@ -31,9 +32,7 @@ final class LocatorManager {
   static FirebaseAuthService get firebaseAuth => GetIt.I<FirebaseAuthService>();
   static FirestoreService get firestoreService => GetIt.I<FirestoreService>();
   static UserRepository get userRepository => GetIt.I<UserRepository>();
-  static FirestoreRepository get firestoreRepository =>
-      GetIt.I<FirestoreRepository>();
+  static FirestoreRepository get firestoreRepository => GetIt.I<FirestoreRepository>();
   static ProductService get productService => GetIt.I<ProductService>();
-  static ProductRepository get productRepository =>
-      GetIt.I<ProductRepository>();
+  static ProductRepository get productRepository => GetIt.I<ProductRepository>();
 }
