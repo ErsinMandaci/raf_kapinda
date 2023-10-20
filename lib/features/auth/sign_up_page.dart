@@ -1,3 +1,5 @@
+
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,42 +9,20 @@ import 'package:groceries_app/core/widgets/custom_form_text.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
-import 'package:groceries_app/features/provider/riverpod_management.dart';
-import 'package:groceries_app/model/user_model.dart';
+import 'package:groceries_app/features/auth/mixin/sign_up_mixin.dart';
 import 'package:kartal/kartal.dart';
 
-// ignore: must_be_immutable
-class SignUpPage extends ConsumerWidget {
-  SignUpPage({super.key});
-
-  final _formKey = GlobalKey<FormState>();
-
-  String? _email;
-  String? _password;
-  String? _userName;
+@RoutePage()
+class SignUpPage extends ConsumerStatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final watch = ref.watch(userProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpPageState();
+}
 
-    Future<void> formSubmit() async {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState?.save();
-        UserModel(userName: _userName);
-        try {
-          await watch
-              .createUserWithEmailAndPassword(
-                _email ?? '',
-                _password ?? '',
-                _userName ?? '',
-              )
-              .then((value) => Navigator.pushNamed(context, 'login'));
-        } catch (e) {
-          throw Exception('createUserWithEmailAndPassword $e signUp');
-        }
-      }
-    }
-
+class _SignUpPageState extends ConsumerState<SignUpPage> with SignUpPageMixin {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -76,14 +56,14 @@ class SignUpPage extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           children: [
                             CustomTextFormField(
                               labelText: 'Username',
                               hintText: 'Enter your username',
                               onSaved: (value) {
-                                _userName = value;
+                                userName = value;
                               },
                             ),
                             CustomTextFormField(
@@ -91,7 +71,7 @@ class SignUpPage extends ConsumerWidget {
                               hintText: 'Enter your emails',
                               keyboardType: TextInputType.emailAddress,
                               onSaved: (value) {
-                                _email = value;
+                                email = value;
                               },
                             ),
                             CustomTextFormField(
@@ -99,7 +79,7 @@ class SignUpPage extends ConsumerWidget {
                               labelText: 'Password',
                               hintText: 'Enter your password',
                               onSaved: (value) {
-                                _password = value;
+                                password = value;
                               },
                             )
                           ],
@@ -113,7 +93,7 @@ class SignUpPage extends ConsumerWidget {
                       child: CustomElevatedButton(
                         text: 'Sing Up',
                         onPressed: () {
-                          formSubmit();
+                          formSubmit(ref: ref);
                         },
                       ),
                     ),
@@ -149,3 +129,142 @@ class SignUpPage extends ConsumerWidget {
     );
   }
 }
+
+// @RoutePage()
+// class SignUpPage extends ConsumerWidget {
+//   SignUpPage({super.key});
+
+//   final _formKey = GlobalKey<FormState>();
+
+//   String? _email;
+//   String? _password;
+//   String? _userName;
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final watchUserProvider = ref.watch(userProvider);
+
+//     Future<void> formSubmit() async {
+//       if (_formKey.currentState!.validate()) {
+//         _formKey.currentState?.save();
+//         UserModel(userName: _userName);
+//         try {
+//           await watchUserProvider
+//               .createUserWithEmailAndPassword(
+//                 _email ?? '',
+//                 _password ?? '',
+//                 _userName ?? '',
+//               )
+//               .then((value) => Navigator.pushNamed(context, 'login'));
+//         } catch (e) {
+//           throw Exception('createUserWithEmailAndPassword $e signUp');
+//         }
+//       }
+//     }
+
+//     return Scaffold(
+//       body: SafeArea(
+//         child: SingleChildScrollView(
+//           physics: const ScrollPhysics(),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Center(
+//                 child: Padding(
+//                   padding: EdgeInsets.only(top: context.onlyTopPaddingHigh.top),
+//                   child: Image.asset(
+//                     ImageEnum.havuc.toPng,
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(
+//                 height: 70,
+//               ),
+//               Padding(
+//                 padding: context.paddingNormal,
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     const CustomTextWidget(text: 'SignUp'),
+//                     const Padding(
+//                       padding: EdgeInsets.only(top: 10),
+//                       child: CustomSubTextWidget(
+//                         text: 'Enter your credentials to continue',
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 15),
+//                       child: Form(
+//                         key: _formKey,
+//                         child: Column(
+//                           children: [
+//                             CustomTextFormField(
+//                               labelText: 'Username',
+//                               hintText: 'Enter your username',
+//                               onSaved: (value) {
+//                                 _userName = value;
+//                               },
+//                             ),
+//                             CustomTextFormField(
+//                               labelText: 'Email',
+//                               hintText: 'Enter your emails',
+//                               keyboardType: TextInputType.emailAddress,
+//                               onSaved: (value) {
+//                                 _email = value;
+//                               },
+//                             ),
+//                             CustomTextFormField(
+//                               obscureText: true,
+//                               labelText: 'Password',
+//                               hintText: 'Enter your password',
+//                               onSaved: (value) {
+//                                 _password = value;
+//                               },
+//                             )
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: context.dynamicHeight(0.07),
+//                     ),
+//                     Center(
+//                       child: CustomElevatedButton(
+//                         text: 'Sing Up',
+//                         onPressed: () {
+//                           formSubmit();
+//                         },
+//                       ),
+//                     ),
+//                     SizedBox(height: context.dynamicHeight(0.02)),
+//                     Center(
+//                       child: RichText(
+//                         text: TextSpan(
+//                           text: 'Already have an account? ',
+//                           style: const TextStyle(color: Colors.black),
+//                           children: <TextSpan>[
+//                             TextSpan(
+//                               recognizer: TapGestureRecognizer()
+//                                 ..onTap = () {
+//                                   Navigator.popAndPushNamed(context, 'login');
+//                                 },
+//                               text: 'Sign In',
+//                               style: const TextStyle(
+//                                 fontWeight: FontWeight.bold,
+//                                 color: ColorConst.primaryColor,
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

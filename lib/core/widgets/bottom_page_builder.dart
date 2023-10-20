@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
@@ -9,7 +10,8 @@ import 'package:groceries_app/features/home/home_page.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
-class BottomPageBuilder extends ConsumerStatefulWidget {
+@RoutePage()
+final class BottomPageBuilder extends ConsumerStatefulWidget {
   const BottomPageBuilder({super.key});
 
   @override
@@ -42,7 +44,7 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final basketLength = ref.watch(productProvider).basketProducts.length;
+    final basketList = ref.watch(productProvider).productList;
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -92,7 +94,7 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
                     Icons.shopping_cart_outlined,
                     size: 30,
                   ),
-                  if (basketLength > 0)
+                  if (basketList?.isNotEmpty ?? false)
                     Positioned(
                       right: 0,
                       child: Container(
@@ -107,7 +109,7 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          basketLength.toString(),
+                          basketList.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,

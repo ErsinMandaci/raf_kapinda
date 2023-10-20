@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,8 @@ final _userProvider = ChangeNotifierProvider<UserNotifier>((ref) {
   return UserNotifier();
 });
 
-class LogInPage extends ConsumerWidget {
+@RoutePage()
+final class LogInPage extends ConsumerWidget {
   LogInPage({super.key});
   final _formKey = GlobalKey<FormState>();
 

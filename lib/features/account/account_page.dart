@@ -1,11 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/core/routes/app_router.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
+@RoutePage()
 class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
 
@@ -48,10 +51,9 @@ class AccountPage extends ConsumerWidget {
             const Divider(),
             _AccountListItem(
               onTap: () {
-                ref
-                    .read(firestoreProvider)
-                    .getOrders()
-                    .then((value) => Navigator.pushNamed(context, 'orders'));
+                ref.read(firestoreProvider.notifier).getOrders().then(
+                      (value) => context.router.push(OrdersRoute()),
+                    );
               },
               title: 'Orders',
               icon: const Icon(Icons.shopping_bag_outlined),
@@ -80,14 +82,8 @@ class AccountPage extends ConsumerWidget {
             SizedBox(
               child: TextButton.icon(
                 onPressed: () {
-                  ref
-                      .read(userProvider)
-                      .signOut()
-                      .then(
+                  ref.read(userProvider).signOut().then(
                         (value) => Navigator.pushNamed(context, 'login'),
-                      )
-                      // ignore: inference_failure_on_untyped_parameter
-                      .catchError((error) => 'Error when signing out: $error',
                       );
                 },
                 style: TextButton.styleFrom(),

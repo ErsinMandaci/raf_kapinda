@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +7,9 @@ import 'package:groceries_app/features/auth/log_in_page.dart';
 import 'package:groceries_app/features/home/home_page.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 
-class LandingPage extends ConsumerWidget {
+
+@RoutePage()
+final class LandingPage extends ConsumerWidget {
   const LandingPage({super.key});
 
   @override

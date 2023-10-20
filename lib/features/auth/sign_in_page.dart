@@ -1,9 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:groceries_app/core/constants/string.dart';
 import 'package:groceries_app/core/enums/image_enums.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 
-class SignInPage extends StatelessWidget {
+
+@RoutePage()
+final class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
   @override

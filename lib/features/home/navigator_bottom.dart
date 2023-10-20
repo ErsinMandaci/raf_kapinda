@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:groceries_app/core/constants/color.dart';
-import 'package:groceries_app/features/explore/explore_page.dart';
-import 'package:groceries_app/features/home/home_page.dart';
 import 'package:kartal/kartal.dart';
 
-class NavigatorBottom extends StatefulWidget {
+import '../../core/constants/color.dart';
+import '../explore/explore_page.dart';
+import 'home_page.dart';
+
+
+final class NavigatorBottom extends StatefulWidget {
   const NavigatorBottom({super.key});
 
   @override

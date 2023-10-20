@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:kartal/kartal.dart';
 
-class CustomTextFormField extends StatelessWidget {
+final class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     required this.labelText,
     required this.hintText,

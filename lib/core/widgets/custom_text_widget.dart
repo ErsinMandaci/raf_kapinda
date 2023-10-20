@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:kartal/kartal.dart';
 
-class CustomTextWidget extends StatelessWidget {
+final class CustomTextWidget extends StatelessWidget {
   const CustomTextWidget({
     required this.text,
     super.key,

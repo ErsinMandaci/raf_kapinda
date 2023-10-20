@@ -4,7 +4,7 @@ import 'package:groceries_app/core/services/firestore/firestore_service.dart';
 import 'package:groceries_app/locator_manager.dart';
 import 'package:groceries_app/model/user_model.dart';
 
-class UserRepository implements AuthBase {
+final class UserRepository implements AuthBase {
   final FirebaseAuthService _firebaseAuth = LocatorManager.firebaseAuth;
   final FirestoreService _firestoreDB = LocatorManager.firestoreService;
   @override

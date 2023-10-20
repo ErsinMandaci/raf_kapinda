@@ -7,7 +7,7 @@ import 'package:groceries_app/model/products.dart';
 import 'package:groceries_app/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
-class FirestoreRepository implements DBBase {
+final class FirestoreRepository implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _user = FirebaseAuth.instance.currentUser;
 

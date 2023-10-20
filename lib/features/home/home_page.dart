@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
@@ -9,7 +10,8 @@ import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+@RoutePage()
+final class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
@@ -20,18 +22,24 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future(() => ref.read(productProvider).fetchAndLoad());
+    Future(() => ref.read(productProvider.notifier).allProduct());
   }
 
   @override
   Widget build(BuildContext context) {
-    final productWatch = ref.watch(productProvider).products;
-    //final isLoading = ref.watch(productProvider).isLoading;
-    //final dataLoading = ref.watch(productProvider).dataloading;
+    final productList = ref.watch(productProvider).productList;
+
+    if(productList.isNullOrEmpty){
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.red,
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(),
-      body: productWatch.isEmpty
+      body: productList.isNullOrEmpty
           ? const Center(
               child: CircularProgressIndicator(
                 color: Colors.red,
@@ -43,7 +51,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const PageBuilder(),
+                    const PageBuilderPage(),
                     const SizedBox(height: 20),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,13 +70,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: productWatch.length,
+                        itemCount: productList?.length,
                         itemBuilder: (context, index) {
-                          if (productWatch[index].imageUrl == null) {
+                          if (productList?[index].imageUrl == null) {
                             return Shimmer.fromColors(
                               baseColor: const Color.fromARGB(255, 83, 82, 82),
-                              highlightColor:
-                                  const Color.fromARGB(255, 92, 92, 92),
+                              highlightColor: const Color.fromARGB(255, 92, 92, 92),
                               child: Container(
                                 width: double.infinity,
                                 height: context.dynamicHeight(0.3),
@@ -77,11 +84,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                             );
                           } else {
                             return CustomCard(
-                              imageUrl: productWatch[index].imageUrl,
-                              name: productWatch[index].name,
-                              weigth: productWatch[index].weight,
-                              price: '\$${productWatch[index].price}',
-                              products: productWatch[index],
+                              imageUrl: productList?[index].imageUrl,
+                              name: productList?[index].name,
+                              weigth: productList?[index].weight,
+                              price: '\$${productList?[index].price}',
+                              products: productList?[index],
                             );
                           }
                         },
@@ -109,14 +116,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: productWatch.length,
+                        itemCount: productList?.length,
                         itemBuilder: (context, index) {
                           return CustomCard(
-                            imageUrl: productWatch[index].imageUrl,
-                            name: productWatch[index].name,
-                            weigth: productWatch[index].weight,
-                            price: '\$${productWatch[index].price}',
-                            products: productWatch[index],
+                            imageUrl: productList?[index].imageUrl,
+                            name: productList?[index].name,
+                            weigth: productList?[index].weight,
+                            price: '\$${productList?[index].price}',
+                            products: productList?[index],
                           );
                         },
                       ),
@@ -128,28 +135,3 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
-
-// class _CustomTextField extends StatelessWidget {
-//   const _CustomTextField();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const TextField(
-//       decoration: InputDecoration(
-//         border: OutlineInputBorder(
-//           borderSide: BorderSide.none,
-//         ),
-//         hintText: 'Search store',
-//         hintStyle: TextStyle(
-//           fontSize: 14,
-//           color: ColorConst.subTextColor,
-//         ),
-//         prefixIcon: Icon(
-//           Icons.search,
-//           size: 24,
-//           color: Colors.black,
-//         ),
-//       ),
-//     );
-//   }
-// }

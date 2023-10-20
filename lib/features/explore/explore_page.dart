@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
@@ -6,14 +7,15 @@ import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
-class ExplorePage extends ConsumerWidget {
+@RoutePage()
+final class ExplorePage extends ConsumerWidget {
   ExplorePage({super.key});
   final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final category = ref.watch(productProvider).categories;
-    final search = ref.watch(productProvider).searchProducts;
+    final category = ref.watch(productProvider).categoryList;
+  final search = ref.watch(productProvider).searchResults;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -22,7 +24,7 @@ class ExplorePage extends ConsumerWidget {
       body: Column(
         children: [
           _SearchTextField(searchController: _searchController),
-          if (search.isNotEmpty)
+          if (search.isNotNullOrEmpty)
             Expanded(
               child: GridView.builder(
                 padding: context.paddingNormal,
@@ -32,7 +34,7 @@ class ExplorePage extends ConsumerWidget {
                   mainAxisSpacing: 30,
                   childAspectRatio: 0.7,
                 ),
-                itemCount: search.length,
+                itemCount: search!.length,
                 itemBuilder: (context, index) {
                   final seacrhIndex = search[index];
                   return CustomCard(
@@ -55,13 +57,13 @@ class ExplorePage extends ConsumerWidget {
                   mainAxisSpacing: 30,
                   childAspectRatio: 0.8,
                 ),
-                itemCount: category.length,
+                itemCount: category?.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
                       ref
-                          .read(productProvider)
-                          .onCategorySelected(category[index]);
+                          .read(productProvider.notifier)
+                          .filterCategory(category![index]);
                       Navigator.pushNamed(context, 'categoryFilter');
                     },
                     child: Container(
@@ -73,7 +75,7 @@ class ExplorePage extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Image.network(
-                            category[index].categoryImage ?? '',
+                            category?[index].categoryImage ?? '',
                             fit: BoxFit.fill,
                             width: 120,
                             height: 120,
@@ -81,7 +83,7 @@ class ExplorePage extends ConsumerWidget {
                           CustomTextWidget(
                             fontWeight: FontWeight.bold,
                             fontsize: 16,
-                            text: category[index].name ?? '',
+                            text: category?[index].name ?? '',
                           )
                         ],
                       ),
@@ -121,7 +123,7 @@ class __SearchTextFieldState extends ConsumerState<_SearchTextField> {
     return TextField(
       controller: widget.searchController,
       onChanged: (value) {
-        ref.watch(productProvider).searchList(value);
+        ref.watch(productProvider.notifier).searchProducts(value);
       },
       decoration: const InputDecoration(
         border: OutlineInputBorder(

@@ -5,7 +5,7 @@ import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/model/products.dart';
 import 'package:kartal/kartal.dart';
 
-class CustomCard extends StatelessWidget {
+final class CustomCard extends StatelessWidget {
   const CustomCard({
     required this.imageUrl,
     required this.name,
@@ -18,7 +18,7 @@ class CustomCard extends StatelessWidget {
   final String? name;
   final String? weigth;
   final String? price;
-  final Products products;
+  final Products? products;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class CustomCard extends StatelessWidget {
                     fontsize: 16,
                   ),
                   CustomAddButton(
-                    products: products,
+                    products: products ?? Products(),
                   )
                 ],
               )

@@ -1,10 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:kartal/kartal.dart';
 
-class OrdersPage extends ConsumerWidget {
+@RoutePage()
+final class OrdersPage extends ConsumerWidget {
   const OrdersPage({super.key});
 
   @override
@@ -16,8 +18,9 @@ class OrdersPage extends ConsumerWidget {
         title: const CustomTextWidget(text: 'Orders'),
       ),
       body: ListView.builder(
-        itemCount: userOrders.length,
+        itemCount: userOrders?.length,
         itemBuilder: (context, index) {
+          if (userOrders == null) return const Center(child: CircularProgressIndicator());
           final userOrdersIndex = userOrders[index];
 
           return Card(
@@ -51,8 +54,7 @@ class OrdersPage extends ConsumerWidget {
                         children: [
                           Text('Piece: ${product.quantity}'),
                           Text(
-                            'Total \$${(product.price ?? 0 * product.quantity!).
-                            roundToDouble()}',
+                            'Total \$${(product.price ?? 0 * product.quantity!).roundToDouble()}',
                           ),
                         ],
                       ),

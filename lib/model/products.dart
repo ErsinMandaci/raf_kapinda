@@ -10,6 +10,7 @@ final class Products with EquatableMixin {
   Products({
     this.id,
     this.name,
+    this.isFavorite,
     this.price,
     this.stock,
     this.description,
@@ -23,6 +24,7 @@ final class Products with EquatableMixin {
       _$ProductsFromJson(json);
 final int? id;
 final String? name;
+final bool? isFavorite;
 final double? price;
 final int? stock;
 final String? description;
@@ -37,6 +39,7 @@ final String? weight;
   List<Object?> get props => [
         id,
         name,
+        isFavorite,
         price,
         stock,
         description,
@@ -49,6 +52,7 @@ final String? weight;
   Products copyWith({
     int? id,
     String? name,
+    bool? isFavorite,
     double? price,
     int? stock,
     String? description,
@@ -60,6 +64,7 @@ final String? weight;
     return Products(
       id: id ?? this.id,
       name: name ?? this.name,
+      isFavorite: isFavorite ?? this.isFavorite,
       price: price ?? this.price,
       stock: stock ?? this.stock,
       description: description ?? this.description,

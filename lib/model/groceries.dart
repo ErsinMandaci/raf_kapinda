@@ -6,17 +6,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'groceries.g.dart';
 
-@JsonSerializable()
 @immutable
+@JsonSerializable()
 final class Groceries with EquatableMixin {
   Groceries({
     this.products,
     this.categories,
   });
 
-  factory Groceries.fromJson(Map<String, dynamic> json) =>
-      _$groceriesFromJson(json);
- final List<Products>? products;
+  factory Groceries.fromJson(Map<String, dynamic> json) => _$groceriesFromJson(json);
+  final List<Products>? products;
   final List<Categories>? categories;
 
   Map<String, dynamic> toJson() => _$groceriesToJson(this);

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
@@ -9,13 +10,14 @@ import 'package:groceries_app/features/provider/riverpod_management.dart';
 import 'package:groceries_app/model/products.dart';
 import 'package:kartal/kartal.dart';
 
-class CartPage extends ConsumerWidget {
+@RoutePage()
+final class CartPage extends ConsumerWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final basketProducts = ref.watch(productProvider).basketProducts;
-  
+    final basketProducts = ref.watch(productProvider).basketList;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: context.dynamicHeight(0.1),
@@ -23,7 +25,7 @@ class CartPage extends ConsumerWidget {
           child: CustomTextWidget(text: 'My Cart'),
         ),
       ),
-      body: basketProducts.isEmpty
+      body: basketProducts.isNullOrEmpty
           ? const Center(
               child: CustomSubTextWidget(
                 text: 'No Product ',
@@ -37,13 +39,21 @@ class CartPage extends ConsumerWidget {
                   Expanded(
                     child: ListView.separated(
                       shrinkWrap: true,
-                      itemCount: basketProducts.length,
+                      itemCount: basketProducts?.length ?? 0,
                       itemBuilder: (context, index) {
-                        final basketIndex = basketProducts[index];
+                        final basketIndex = basketProducts?[index];
+                        if (basketIndex == null) {
+                          return const Center(
+                            child: CustomSubTextWidget(
+                              text: 'No Product ',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }
                         return ListTile(
                           visualDensity: const VisualDensity(vertical: 4),
                           leading: Image.network(
-                            basketIndex.imageUrl ?? 'not image',
+                            basketIndex.imageUrl!,
                             width: context.dynamicWidth(0.2),
                             height: context.dynamicHeight(0.1),
                             fit: BoxFit.fill,
@@ -52,18 +62,17 @@ class CartPage extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomTextWidget(
                                     fontsize: 16,
-                                    text: basketIndex.name ?? 'not name',
+                                    text: basketIndex.name!,
                                   ),
                                   _CustomAlertDialog(basketIndex: basketIndex)
                                 ],
                               ),
                               CustomSubTextWidget(
-                                text: basketIndex.weight ?? 'not weight',
+                                text: basketIndex.weight!,
                               ),
                             ],
                           ),
@@ -71,13 +80,11 @@ class CartPage extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
-                                    onPressed: () => ref
-                                        .watch(productProvider)
-                                        .counterDecrement(basketIndex),
+                                    onPressed: () =>
+                                        ref.watch(productProvider.notifier).decrementProductQuantity(basketIndex),
                                     icon: const Icon(Icons.remove),
                                   ),
                                   CustomTextWidget(
@@ -85,9 +92,8 @@ class CartPage extends ConsumerWidget {
                                     text: basketIndex.quantity.toString(),
                                   ),
                                   IconButton(
-                                    onPressed: () => ref
-                                        .watch(productProvider)
-                                        .counterIncrement(basketIndex),
+                                    onPressed: () =>
+                                        ref.watch(productProvider.notifier).incrementProductQuantity(basketIndex),
                                     icon: const Icon(
                                       Icons.add,
                                       color: ColorConst.primaryColor,
@@ -98,9 +104,7 @@ class CartPage extends ConsumerWidget {
                               CustomTextWidget(
                                 fontWeight: FontWeight.w600,
                                 fontsize: 16,
-                                text:
-                                    '\$${ref.read(productProvider).
-                                    getBasketPrice(basketProducts[index])}',
+                                text: '\$${ref.watch(productProvider).totalBasketPrice}',
                               ),
                             ],
                           ),
@@ -135,8 +139,7 @@ class CartPage extends ConsumerWidget {
                                 ),
                                 child: Container(
                                   color: Colors.white,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
+                                  height: MediaQuery.of(context).size.height * 0.7,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -150,8 +153,7 @@ class CartPage extends ConsumerWidget {
                                             width: 200,
                                             height: 100,
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text('Select Method'),
                                                 Icon(Icons.arrow_forward_ios),
@@ -173,15 +175,13 @@ class CartPage extends ConsumerWidget {
                                           color: Colors.black,
                                         ),
                                         ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.all(30),
+                                          contentPadding: const EdgeInsets.all(30),
                                           leading: const CustomSubTextWidget(
                                             text: 'Total Cost',
                                           ),
                                           trailing: CustomTextWidget(
                                             fontsize: 18,
-                                            text:
-                                                '\$${ref.read(productProvider).totalCardPrice}',
+                                            text: '\$${ref.read(productProvider).productQuantity}',
                                           ),
                                         ),
                                         const Divider(
@@ -191,31 +191,27 @@ class CartPage extends ConsumerWidget {
                                           child: CustomElevatedButton(
                                             onPressed: () {
                                               ref
-                                                  .read(firestoreProvider)
+                                                  .read(firestoreProvider.notifier)
                                                   .pushBasketDataToFirestore(
-                                                    basketProducts,
+                                                    // null gelebilir mi bak ?
+                                                    basketProducts!,
                                                   )
                                                   .then(
-                                                    (value) =>
-                                                        basketProducts.clear(),
+                                                    (value) => basketProducts.clear(),
                                                   )
                                                   .then(
-                                                    (value) => Navigator
-                                                        .pushAndRemoveUntil(
+                                                    (value) => Navigator.pushAndRemoveUntil(
                                                       context,
                                                       MaterialPageRoute<Widget>(
-                                                        builder: (context) =>
-                                                            const BottomPageBuilder(),
+                                                        builder: (context) => const BottomPageBuilder(),
                                                       ),
                                                       (route) => false,
                                                     ),
                                                   );
 
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
+                                              ScaffoldMessenger.of(context).showSnackBar(
                                                 const SnackBar(
-                                                  backgroundColor:
-                                                      ColorConst.primaryColor,
+                                                  backgroundColor: ColorConst.primaryColor,
                                                   content: Text(
                                                     'Siparişiniz alındı.',
                                                   ),
@@ -243,7 +239,7 @@ class CartPage extends ConsumerWidget {
                               width: 50,
                               height: 30,
                               child: Text(
-                                '\$${ref.watch(productProvider).cardPrice()}',
+                                '\$${ref.watch(productProvider).totalBasketPrice}',
                               ),
                             )
                           ],
@@ -277,8 +273,7 @@ class _CustomAlertDialog extends ConsumerWidget {
               contentTextStyle: const TextStyle(
                 fontSize: 20,
               ),
-              content:
-                  const Text('Are you sure you want to delete this product?'),
+              content: const Text('Are you sure you want to delete this product?'),
               actions: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -287,7 +282,7 @@ class _CustomAlertDialog extends ConsumerWidget {
                   ),
                   onPressed: () {
                     Navigator.pop(context);
-                    ref.read(productProvider).removeBasket(basketIndex);
+                    ref.read(productProvider.notifier).removeProductBasket(basketIndex);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

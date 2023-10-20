@@ -3,14 +3,14 @@ import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/enums/image_enums.dart';
 import 'package:kartal/kartal.dart';
 
-class PageBuilder extends StatefulWidget {
-  const PageBuilder({super.key});
+final class PageBuilderPage extends StatefulWidget {
+  const PageBuilderPage({super.key});
 
   @override
-  State<PageBuilder> createState() => _PageBuilderState();
+  State<PageBuilderPage> createState() => _PageBuilderPageState();
 }
 
-class _PageBuilderState extends State<PageBuilder> {
+class _PageBuilderPageState extends State<PageBuilderPage> {
   late PageController _pageController;
   int activePage = 0;
   @override
@@ -32,8 +32,7 @@ class _PageBuilderState extends State<PageBuilder> {
         height: 10,
         width: 10,
         decoration: BoxDecoration(
-          color:
-              currentIndex == index ? ColorConst.primaryColor : Colors.black26,
+          color: currentIndex == index ? ColorConst.primaryColor : Colors.black26,
           shape: BoxShape.circle,
         ),
       );

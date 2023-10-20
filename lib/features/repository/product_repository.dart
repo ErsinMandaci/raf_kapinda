@@ -3,7 +3,7 @@ import 'package:groceries_app/locator_manager.dart';
 import 'package:groceries_app/model/groceries.dart';
 import 'package:kartal/kartal.dart';
 
-class ProductRepository {
+final class ProductRepository {
   final ProductService _productService = LocatorManager.productService;
 
   Future<List<Groceries>>? getProduct() async {

@@ -1,15 +1,27 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:groceries_app/core/routes/app_router.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
+import 'package:kartal/kartal.dart';
 
-class FavouritePage extends ConsumerWidget {
+@RoutePage()
+final class FavouritePage extends ConsumerWidget {
   const FavouritePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favProduct = ref.watch(productProvider).getFavoriteProducts();
+    final favoriteList = ref.watch(productProvider).filteredFavoriteList;
+
+    if (favoriteList == null || favoriteList.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.red,
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -19,7 +31,7 @@ class FavouritePage extends ConsumerWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      body: favProduct.isEmpty
+      body: favoriteList.isNullOrEmpty
           ? const Center(
               child: CustomSubTextWidget(
                 text: 'No Favourite Product ',
@@ -27,25 +39,22 @@ class FavouritePage extends ConsumerWidget {
               ),
             )
           : ListView.builder(
-              itemCount: favProduct.length,
+              itemCount: favoriteList.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
                     onTap: () {
-                      ref
-                          .read(productProvider)
-                          .selectedItem(favProduct[index])
-                          .then(
-                            (value) => Navigator.pushNamed(context, 'detail'),
-                          );
+                      ref.read(productProvider.notifier).selectedItem(favoriteList[index]);
+                      if (ref.watch(productProvider).selectedProduct != null)
+                        context.router.push(const ProductDetailRoute());
                     },
-                    leading: Image.network(favProduct[index].imageUrl ?? ''),
+                    leading: Image.network(favoriteList[index].imageUrl ?? ''),
                     title: CustomTextWidget(
-                      text: favProduct[index].name ?? '',
+                      text: favoriteList[index].name ?? '',
                       fontsize: 18,
                     ),
                     subtitle: CustomSubTextWidget(
-                      text: favProduct[index].weight ?? '',
+                      text: favoriteList[index].weight ?? '',
                       fontSize: 14,
                     ),
                     trailing: Row(
@@ -53,7 +62,7 @@ class FavouritePage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CustomTextWidget(
-                          text: '\$${favProduct[index].price}',
+                          text: '\$${favoriteList[index].price}',
                           fontsize: 18,
                         ),
                         const Icon(Icons.navigate_next_rounded, size: 30)
