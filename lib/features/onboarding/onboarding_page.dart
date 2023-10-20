@@ -1,14 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/constants/string.dart';
 import 'package:groceries_app/core/enums/image_enums.dart';
-import 'package:groceries_app/core/routes/route.dart' as route;
+import 'package:groceries_app/core/routes/app_router.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
 import 'package:kartal/kartal.dart';
 
-class OnboardingView extends StatelessWidget {
-  const OnboardingView({super.key});
+@RoutePage()
+final class OnboardingPage extends StatelessWidget {
+  const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class OnboardingView extends StatelessWidget {
               width: context.dynamicWidth(0.7),
               height: context.dynamicHeight(0.06),
               child: CustomElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, route.signInPage),
+                onPressed: () => context.router.push(SignInRoute()),
                 text: 'Get Started',
               ),
             ),
