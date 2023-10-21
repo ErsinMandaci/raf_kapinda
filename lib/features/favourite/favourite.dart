@@ -15,7 +15,7 @@ final class FavouritePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoriteList = ref.watch(productProvider).filteredFavoriteList;
 
-    if (favoriteList == null || favoriteList.isEmpty) {
+    if (favoriteList.isNullOrEmpty) {
       return const Center(
         child: CircularProgressIndicator(
           color: Colors.red,
@@ -31,47 +31,39 @@ final class FavouritePage extends ConsumerWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      body: favoriteList.isNullOrEmpty
-          ? const Center(
-              child: CustomSubTextWidget(
-                text: 'No Favourite Product ',
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          : ListView.builder(
-              itemCount: favoriteList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    onTap: () {
-                      ref.read(productProvider.notifier).selectedItem(favoriteList[index]);
-                      if (ref.watch(productProvider).selectedProduct != null)
-                        context.router.push(const ProductDetailRoute());
-                    },
-                    leading: Image.network(favoriteList[index].imageUrl ?? ''),
-                    title: CustomTextWidget(
-                      text: favoriteList[index].name ?? '',
-                      fontsize: 18,
-                    ),
-                    subtitle: CustomSubTextWidget(
-                      text: favoriteList[index].weight ?? '',
-                      fontSize: 14,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        CustomTextWidget(
-                          text: '\$${favoriteList[index].price}',
-                          fontsize: 18,
-                        ),
-                        const Icon(Icons.navigate_next_rounded, size: 30)
-                      ],
-                    ),
-                  ),
-                );
+      body: ListView.builder(
+        itemCount: favoriteList!.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              onTap: () {
+                ref.read(productProvider.notifier).selectedItem(favoriteList[index]);
+                if (ref.watch(productProvider).selectedProduct != null) context.router.push(const ProductDetailRoute());
               },
+              leading: Image.network(favoriteList[index].imageUrl!),
+              title: CustomTextWidget(
+                text: favoriteList[index].name!,
+                fontsize: 18,
+              ),
+              subtitle: CustomSubTextWidget(
+                text: favoriteList[index].weight!,
+                fontSize: 14,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomTextWidget(
+                    text: '\$${favoriteList[index].price}',
+                    fontsize: 18,
+                  ),
+                  const Icon(Icons.navigate_next_rounded, size: 30)
+                ],
+              ),
             ),
+          );
+        },
+      ),
     );
   }
 }

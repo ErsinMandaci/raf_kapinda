@@ -20,23 +20,24 @@ import '../../features/splash/splash_page.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig()
-class AppRouter extends _$AppRouter {
+final class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: ExploreRoute.page),
+        AutoRoute(page: BottomRouteBuilder.page, initial: true, children: [
+          AutoRoute(page: HomeRoute.page),
+          AutoRoute(page: ExploreRoute.page),
+          AutoRoute(page: CartRoute.page),
+          AutoRoute(page: FavouriteRoute.page),
+          AutoRoute(page: AccountRoute.page),
+        ]),
         AutoRoute(page: CategoryFilterRoute.page),
-        AutoRoute(page: FavouriteRoute.page),
-        AutoRoute(page: CartRoute.page),
-        AutoRoute(page: AccountRoute.page),
         AutoRoute(page: OrdersRoute.page),
-        AutoRoute(page: HomeRoute.page),
-        AutoRoute(page: LandingRoute.page, initial: true),
+        AutoRoute(page: LandingRoute.page),
         AutoRoute(page: LogInRoute.page),
         AutoRoute(page: SignUpRoute.page),
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: ProductDetailRoute.page),
         AutoRoute(page: OnboardingRoute.page),
         AutoRoute(page: SplashRoute.page),
-        AutoRoute(page: BottomRouteBuilder.page),
       ];
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
 import 'package:groceries_app/core/routes/app_router.dart';
-import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
@@ -59,24 +58,7 @@ final class CartPage extends ConsumerWidget {
                             height: context.dynamicHeight(0.1),
                             fit: BoxFit.fill,
                           ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CustomTextWidget(
-                                    fontsize: 16,
-                                    text: basketIndex.name!,
-                                  ),
-                                  _CustomAlertDialog(basketIndex: basketIndex)
-                                ],
-                              ),
-                              CustomSubTextWidget(
-                                text: basketIndex.weight!,
-                              ),
-                            ],
-                          ),
+                          title: _BasketProductsName(basketIndex: basketIndex),
                           subtitle: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -146,33 +128,11 @@ final class CartPage extends ConsumerWidget {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const ListTile(
-                                          contentPadding: EdgeInsets.all(30),
-                                          leading: CustomSubTextWidget(
-                                            text: 'Delivery',
-                                          ),
-                                          trailing: SizedBox(
-                                            width: 200,
-                                            height: 100,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text('Select Method'),
-                                                Icon(Icons.arrow_forward_ios),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                        _SelectMethodListTile(),
                                         const Divider(
                                           color: Colors.black,
                                         ),
-                                        const ListTile(
-                                          contentPadding: EdgeInsets.all(30),
-                                          leading: CustomSubTextWidget(
-                                            text: 'Payment',
-                                          ),
-                                          trailing: Icon(Icons.credit_card),
-                                        ),
+                                        _PaymentListTile(),
                                         const Divider(
                                           color: Colors.black,
                                         ),
@@ -191,33 +151,7 @@ final class CartPage extends ConsumerWidget {
                                         const Divider(
                                           color: Colors.black,
                                         ),
-                                        Center(
-                                          child: CustomElevatedButton(
-                                            onPressed: () {
-                                              ref
-                                                  .read(firestoreProvider.notifier)
-                                                  .pushBasketDataToFirestore(
-                                                    // null gelebilir mi bak ?
-                                                    basketProducts,
-                                                  )
-                                                  .then(
-                                                    (value) => basketProducts.clear(),
-                                                  )
-                                                  .then((value) => context.router.pushAndPopUntil(
-                                                      predicate: (route) => false, BottomRouteBuilder()));
-
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
-                                                  backgroundColor: ColorConst.primaryColor,
-                                                  content: Text(
-                                                    'Siparişiniz alındı.',
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            text: 'Place Order',
-                                          ),
-                                        ),
+                                        _PushBasketFireStoreButton(basketProducts: basketProducts),
                                       ],
                                     ),
                                   ),
@@ -247,6 +181,113 @@ final class CartPage extends ConsumerWidget {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class _PushBasketFireStoreButton extends ConsumerWidget {
+  const _PushBasketFireStoreButton({
+    required this.basketProducts,
+  });
+
+  final List<Products>? basketProducts;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: CustomElevatedButton(
+        onPressed: () {
+          ref
+              .read(firestoreProvider.notifier)
+              .pushBasketDataToFirestore(
+                basketProducts ?? [],
+              )
+              .then(
+                (value) => basketProducts?.clear(),
+              )
+              .then((value) => context.router.pushAndPopUntil(predicate: (route) => false, BottomRouteBuilder()));
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: ColorConst.primaryColor,
+              content: Text(
+                'Siparişiniz alındı.',
+              ),
+            ),
+          );
+        },
+        text: 'Place Order',
+      ),
+    );
+  }
+}
+
+class _PaymentListTile extends StatelessWidget {
+  const _PaymentListTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return const ListTile(
+      contentPadding: EdgeInsets.all(30),
+      leading: CustomSubTextWidget(
+        text: 'Payment',
+      ),
+      trailing: Icon(Icons.credit_card),
+    );
+  }
+}
+
+class _SelectMethodListTile extends StatelessWidget {
+  const _SelectMethodListTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return const ListTile(
+      contentPadding: EdgeInsets.all(30),
+      leading: CustomSubTextWidget(
+        text: 'Delivery',
+      ),
+      trailing: SizedBox(
+        width: 200,
+        height: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('Select Method'),
+            Icon(Icons.arrow_forward_ios),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BasketProductsName extends StatelessWidget {
+  const _BasketProductsName({
+    required this.basketIndex,
+  });
+
+  final Products? basketIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextWidget(
+              fontsize: 16,
+              text: basketIndex?.name ?? '',
+            ),
+            _CustomAlertDialog(basketIndex: basketIndex ?? Products()),
+          ],
+        ),
+        CustomSubTextWidget(
+          text: basketIndex?.weight ?? '',
+        ),
+      ],
     );
   }
 }

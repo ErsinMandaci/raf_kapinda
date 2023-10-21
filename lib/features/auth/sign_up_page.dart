@@ -98,32 +98,41 @@ class _SignUpPageState extends ConsumerState<SignUpPage> with SignUpPageMixin {
                       ),
                     ),
                     SizedBox(height: context.dynamicHeight(0.02)),
-                    Center(
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Already have an account? ',
-                          style: const TextStyle(color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.router.popAndPush(LogInRoute());
-                                },
-                              text: 'Sign In',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ColorConst.primaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _AlreadyAccountTextWidget(),
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AlreadyAccountTextWidget extends StatelessWidget {
+  const _AlreadyAccountTextWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          text: 'Already have an account? ',
+          style: const TextStyle(color: Colors.black),
+          children: <TextSpan>[
+            TextSpan(
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  context.router.popAndPush(LogInRoute());
+                },
+              text: 'Sign In',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: ColorConst.primaryColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -17,32 +17,8 @@ final class AccountPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
-        leading: Container(
-          padding: const EdgeInsets.only(top: 40, left: 5),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              'https://randomuser.me/api/portraits/men/84.jpg',
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        title: Container(
-          padding: const EdgeInsets.only(top: 40, left: 15),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextWidget(
-                fontsize: 20,
-                fontWeight: FontWeight.bold,
-                text: 'Account',
-              ),
-              CustomSubTextWidget(
-                text: 'ersin@testgmail.com',
-              ),
-            ],
-          ),
-        ),
+        leading: _AppBarLeadingWidget(),
+        title: _AppBarTitleWidget(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -95,6 +71,48 @@ final class AccountPage extends ConsumerWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AppBarTitleWidget extends StatelessWidget {
+  const _AppBarTitleWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 40, left: 15),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextWidget(
+            fontsize: 20,
+            fontWeight: FontWeight.bold,
+            text: 'Account',
+          ),
+          CustomSubTextWidget(
+            text: 'ersin@testgmail.com',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppBarLeadingWidget extends StatelessWidget {
+  const _AppBarLeadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 40, left: 5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.network(
+          'https://randomuser.me/api/portraits/men/84.jpg',
+          fit: BoxFit.fill,
         ),
       ),
     );

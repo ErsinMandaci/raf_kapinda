@@ -24,7 +24,7 @@ abstract class _$AppRouter extends RootStackRouter {
     BottomRouteBuilder.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const BottomPageBuilder(),
+        child: BottomPageBuilder(),
       );
     },
     CartRoute.name: (routeData) {
@@ -66,11 +66,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LogInRoute.name: (routeData) {
-      final args = routeData.argsAs<LogInRouteArgs>(
-          orElse: () => const LogInRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LogInPage(key: args.key),
+        child: const LogInPage(),
       );
     },
     OnboardingRoute.name: (routeData) {
@@ -98,11 +96,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     SignUpRoute.name: (routeData) {
-      final args = routeData.argsAs<SignUpRouteArgs>(
-          orElse: () => const SignUpRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SignUpPage(key: args.key),
+        child: const SignUpPage(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -243,30 +239,16 @@ class LandingRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LogInPage]
-class LogInRoute extends PageRouteInfo<LogInRouteArgs> {
-  LogInRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class LogInRoute extends PageRouteInfo<void> {
+  const LogInRoute({List<PageRouteInfo>? children})
+      : super(
           LogInRoute.name,
-          args: LogInRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'LogInRoute';
 
-  static const PageInfo<LogInRouteArgs> page = PageInfo<LogInRouteArgs>(name);
-}
-
-class LogInRouteArgs {
-  const LogInRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'LogInRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -327,30 +309,16 @@ class SignInRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SignUpPage]
-class SignUpRoute extends PageRouteInfo<SignUpRouteArgs> {
-  SignUpRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class SignUpRoute extends PageRouteInfo<void> {
+  const SignUpRoute({List<PageRouteInfo>? children})
+      : super(
           SignUpRoute.name,
-          args: SignUpRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'SignUpRoute';
 
-  static const PageInfo<SignUpRouteArgs> page = PageInfo<SignUpRouteArgs>(name);
-}
-
-class SignUpRouteArgs {
-  const SignUpRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'SignUpRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

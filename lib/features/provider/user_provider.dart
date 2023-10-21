@@ -47,7 +47,6 @@ class UserNotifier extends StateNotifier<UserState> implements AuthBase {
       state = state.copyWith(viewState: ViewState.busy);
       await _firebaseService.signOut();
     } catch (e) {
-      // ... hata işleme
     } finally {
       state = state.copyWith(viewState: ViewState.idle);
     }
@@ -75,15 +74,13 @@ class UserNotifier extends StateNotifier<UserState> implements AuthBase {
       state = state.copyWith(user: user, viewState: ViewState.idle);
       return user;
     } catch (e) {
-      // ... hata işleme
+      throw e;
     } finally {
       state = state.copyWith(viewState: ViewState.idle);
     }
-    return Future.value(UserModel());
   }
 }
 
-// UserState sınıfını tanımladık
 class UserState extends Equatable {
   final UserModel? user;
   final ViewState viewState;

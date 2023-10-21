@@ -7,6 +7,7 @@ import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
 import 'package:groceries_app/core/widgets/elevated_button.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
+import 'package:groceries_app/model/products.dart';
 import 'package:kartal/kartal.dart';
 
 @RoutePage()
@@ -38,14 +39,7 @@ final class ProductDetailPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: context.dynamicHeight(0.3),
-                alignment: Alignment.center,
-                child: Image.network(
-                  selectItem.imageUrl!,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              _SelectItemImage(selectItem: selectItem),
               SizedBox(
                 height: context.dynamicHeight(0.04),
               ),
@@ -53,24 +47,7 @@ final class ProductDetailPage extends ConsumerWidget {
                 text: selectItem.name!,
                 fontsize: 24,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomSubTextWidget(
-                    text: selectItem.weight!,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      ref.read(productProvider.notifier).changeFavoriteCard(selectItem);
-                    },
-                    icon: Icon(
-                      Icons.favorite,
-                      color: ref.watch(productProvider).isFavorite ? Colors.red : Colors.grey,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
+              _SelectItemWeight(selectItem: selectItem),
               SizedBox(
                 width: double.infinity,
                 height: 100,
@@ -126,46 +103,118 @@ final class ProductDetailPage extends ConsumerWidget {
                 color: Colors.grey,
               ),
               const SizedBox(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomTextWidget(
-                    fontWeight: FontWeight.w600,
-                    text: 'Product Description',
-                    fontsize: 16,
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                  ),
-                ],
-              ),
+              _ProductDescription(),
               CustomSubTextWidget(
                 text: selectItem.description!,
               ),
               const SizedBox(
                 height: 40,
               ),
-              Align(
-                child: CustomElevatedButton(
-                  text: 'Add To Basket',
-                  onPressed: () {
-                    ref.read(productProvider.notifier).addProductBasket(selectItem);
-                    Fluttertoast.showToast(
-                      msg: '✔️ Ürün sepete eklendi!',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.TOP,
-                      timeInSecForIosWeb: 0,
-                      backgroundColor: ColorConst.primaryColor,
-                      textColor: Colors.white,
-                      fontSize: 16,
-                    );
-                  },
-                ),
-              ),
+              _AddToastMessage(selectItem: selectItem),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AddToastMessage extends ConsumerWidget {
+  const _AddToastMessage({
+    required this.selectItem,
+  });
+
+  final Products selectItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Align(
+      child: CustomElevatedButton(
+        text: 'Add To Basket',
+        onPressed: () {
+          ref.read(productProvider.notifier).addProductBasket(selectItem);
+          Fluttertoast.showToast(
+            msg: '✔️ Ürün sepete eklendi!',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 0,
+            backgroundColor: ColorConst.primaryColor,
+            textColor: Colors.white,
+            fontSize: 16,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ProductDescription extends StatelessWidget {
+  const _ProductDescription();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const CustomTextWidget(
+          fontWeight: FontWeight.w600,
+          text: 'Product Description',
+          fontsize: 16,
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+        ),
+      ],
+    );
+  }
+}
+
+class _SelectItemWeight extends ConsumerWidget {
+  const _SelectItemWeight({
+    required this.selectItem,
+  });
+
+  final Products selectItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        CustomSubTextWidget(
+          text: selectItem.weight ?? "",
+        ),
+        IconButton(
+          onPressed: () {
+            ref.read(productProvider.notifier).changeFavoriteCard(selectItem);
+          },
+          icon: Icon(
+            Icons.favorite,
+            color: ref.watch(productProvider).isFavorite ? Colors.red : Colors.grey,
+            size: 30,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SelectItemImage extends StatelessWidget {
+  const _SelectItemImage({
+    required this.selectItem,
+  });
+
+  final Products selectItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: context.dynamicHeight(0.3),
+      alignment: Alignment.center,
+      child: Image.network(
+        selectItem.imageUrl ?? 'not found image',
+        fit: BoxFit.cover,
       ),
     );
   }

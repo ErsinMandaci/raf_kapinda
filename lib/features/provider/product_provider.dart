@@ -87,6 +87,7 @@ final class ProductNotifier extends StateNotifier<ProductState> {
     calculateProductTotalPrice();
   }
 
+  // Decrements the quantity of the given [product] in the [state]'s [productList].
   void decrementProductQuantity(Products product) {
     final updatedProductList = state.productList?.map((element) {
       if (element.id == product.id && (element.quantity ?? 0) > 0) {
@@ -125,19 +126,6 @@ final class ProductNotifier extends StateNotifier<ProductState> {
     final totalPrice = (state.selectedProduct?.price ?? 0.0) * (state.selectedProduct?.quantity ?? 0);
     state = state.copyWith(totalPrice: totalPrice);
   }
-
-  // void calculateTotalBasketPrice() {
-  //   final basketList = state.basketList;
-  //   if (basketList != null && basketList.isNotEmpty) {
-  //     double total = 0.0;
-  //     for (var product in basketList) {
-  //       total += (product.price ?? 0.0) * (product.quantity ?? 1);
-  //     }
-  //     state = state.copyWith(totalBasketPrice: total);
-  //   } else {
-  //     state = state.copyWith(totalBasketPrice: 0.0);
-  //   }
-  // }
 }
 
 final class ProductState extends Equatable {
