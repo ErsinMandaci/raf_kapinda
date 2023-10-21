@@ -1,85 +1,40 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:groceries_app/core/constants/color.dart';
-import 'package:groceries_app/features/account/account_page.dart';
-import 'package:groceries_app/features/card/cart_page.dart';
-import 'package:groceries_app/features/explore/explore_page.dart';
-import 'package:groceries_app/features/favourite/favourite.dart';
-import 'package:groceries_app/features/home/home_page.dart';
-import 'package:groceries_app/features/provider/riverpod_management.dart';
-import 'package:kartal/kartal.dart';
+import 'package:groceries_app/core/routes/app_router.dart';
 
 @RoutePage()
-final class BottomPageBuilder extends ConsumerStatefulWidget {
-  const BottomPageBuilder({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MainPageState();
-}
-
-class _MainPageState extends ConsumerState<BottomPageBuilder> {
-  int currentIndex = 0;
-  late final PageController _bottomPageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _bottomPageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _bottomPageController.dispose();
-    super.dispose();
-  }
-
-  final pages = [
-    const HomePage(),
-    ExplorePage(),
-    const CartPage(),
-    const FavouritePage(),
-    const AccountPage(),
-  ];
-
+final class BottomPageBuilder extends StatelessWidget {
+  const BottomPageBuilder();
   @override
   Widget build(BuildContext context) {
-    final basketList = ref.watch(productProvider).basketList;
-    return Scaffold(
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _bottomPageController,
-        children: pages,
-        onPageChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-      ),
-      bottomNavigationBar: SizedBox(
-        height: context.dynamicHeight(0.1),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
+    return AutoTabsScaffold(
+      animationDuration: Duration(milliseconds: 1000),
+      animationCurve: Curves.bounceOut,
+      routes: [
+        HomeRoute(),
+        ExploreRoute(),
+        CartRoute(),
+        FavouriteRoute(),
+        AccountRoute(),
+      ],
+      bottomNavigationBuilder: (_, tabsRouter) {
+        return BottomNavigationBar(
+          currentIndex: tabsRouter.activeIndex,
+          onTap: tabsRouter.setActiveIndex,
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
-          selectedItemColor: ColorConst.primaryColor,
-          unselectedItemColor: Colors.black54,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.black,
           unselectedFontSize: 14,
-          onTap: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-            _bottomPageController.jumpToPage(value);
-          },
           items: [
-            const BottomNavigationBarItem(
-              label: 'Shope',
+            BottomNavigationBarItem(
+              label: 'Home',
               icon: Icon(
-                Icons.shopping_bag_outlined,
+                Icons.home_outlined,
                 size: 30,
               ),
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               label: 'Explore',
               icon: Icon(
                 Icons.manage_search_outlined,
@@ -88,58 +43,28 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
             ),
             BottomNavigationBarItem(
               label: 'Cart',
-              icon: Stack(
-                children: [
-                  const Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 30,
-                  ),
-                  if (basketList?.isNotEmpty ?? false)
-                    Positioned(
-                      right: 0,
-                      child: Container(
-                        alignment: Alignment.center,
-                        constraints: const BoxConstraints(
-                          minWidth: 14,
-                          minHeight: 14,
-                        ),
-                        padding: const EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          basketList?.length.toString() ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                ],
-              ),
-            ),
-            const BottomNavigationBarItem(
-              label: 'Favourite',
               icon: Icon(
-                Icons.favorite_outline,
+                Icons.shopping_cart_outlined,
                 size: 30,
               ),
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
+              label: 'Favourite',
+              icon: Icon(
+                Icons.favorite_border_outlined,
+                size: 30,
+              ),
+            ),
+            BottomNavigationBarItem(
               label: 'Account',
               icon: Icon(
-                Icons.manage_accounts_outlined,
+                Icons.person_outline,
                 size: 30,
               ),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
