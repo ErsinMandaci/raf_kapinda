@@ -8,9 +8,8 @@ final class ProductRepository {
 
   Future<List<Groceries>>? getProduct() async {
     final jsonData = await _productService.loadJson();
-
-    if (jsonData.categories.isNotNullOrEmpty &&
-        jsonData.products.isNotNullOrEmpty) {
+    if (jsonData == null) return [];
+    if (jsonData.categories.isNotNullOrEmpty && jsonData.products.isNotNullOrEmpty) {
       return [jsonData];
     } else {
       return [];
