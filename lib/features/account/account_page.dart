@@ -82,8 +82,8 @@ final class AccountPage extends ConsumerWidget {
             SizedBox(
               child: TextButton.icon(
                 onPressed: () {
-                  ref.read(userProvider).signOut().then(
-                        (value) => Navigator.pushNamed(context, 'login'),
+                  ref.read(userNotifierProvider.notifier).signOut().then(
+                        (value) => context.router.push(LogInRoute()),
                       );
                 },
                 style: TextButton.styleFrom(),

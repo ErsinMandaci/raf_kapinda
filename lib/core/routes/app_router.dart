@@ -30,13 +30,13 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: AccountRoute.page),
         AutoRoute(page: OrdersRoute.page),
         AutoRoute(page: HomeRoute.page),
-        AutoRoute(page: LandingRoute.page),
+        AutoRoute(page: LandingRoute.page, initial: true),
         AutoRoute(page: LogInRoute.page),
         AutoRoute(page: SignUpRoute.page),
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: ProductDetailRoute.page),
         AutoRoute(page: OnboardingRoute.page),
         AutoRoute(page: SplashRoute.page),
-        AutoRoute(page: BottomRouteBuilder.page, initial: true),
+        AutoRoute(page: BottomRouteBuilder.page),
       ];
 }

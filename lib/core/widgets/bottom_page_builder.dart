@@ -44,7 +44,7 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final basketList = ref.watch(productProvider).productList;
+    final basketList = ref.watch(productProvider).basketList;
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -109,7 +109,7 @@ class _MainPageState extends ConsumerState<BottomPageBuilder> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          basketList.toString(),
+                          basketList?.length.toString() ?? '',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,

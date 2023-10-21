@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/core/routes/app_router.dart';
 import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/core/widgets/custom_sub_text_widget.dart';
 import 'package:groceries_app/core/widgets/custom_text_widget.dart';
@@ -92,8 +93,9 @@ final class CartPage extends ConsumerWidget {
                                     text: basketIndex.quantity.toString(),
                                   ),
                                   IconButton(
-                                    onPressed: () =>
-                                        ref.watch(productProvider.notifier).incrementProductQuantity(basketIndex),
+                                    onPressed: () {
+                                      ref.watch(productProvider.notifier).incrementProductQuantity(basketIndex);
+                                    },
                                     icon: const Icon(
                                       Icons.add,
                                       color: ColorConst.primaryColor,
@@ -104,7 +106,7 @@ final class CartPage extends ConsumerWidget {
                               CustomTextWidget(
                                 fontWeight: FontWeight.w600,
                                 fontsize: 16,
-                                text: '\$${ref.watch(productProvider).totalBasketPrice}',
+                                text: '\$${ref.watch(productProvider).productTotalPrice}',
                               ),
                             ],
                           ),
@@ -181,7 +183,9 @@ final class CartPage extends ConsumerWidget {
                                           ),
                                           trailing: CustomTextWidget(
                                             fontsize: 18,
-                                            text: '\$${ref.read(productProvider).productQuantity}',
+                                            text: '\$${ref.read(productProvider.notifier).getProductQuantity(
+                                                  basketProducts![0].id.toString(),
+                                                )}',
                                           ),
                                         ),
                                         const Divider(
@@ -194,20 +198,13 @@ final class CartPage extends ConsumerWidget {
                                                   .read(firestoreProvider.notifier)
                                                   .pushBasketDataToFirestore(
                                                     // null gelebilir mi bak ?
-                                                    basketProducts!,
+                                                    basketProducts,
                                                   )
                                                   .then(
                                                     (value) => basketProducts.clear(),
                                                   )
-                                                  .then(
-                                                    (value) => Navigator.pushAndRemoveUntil(
-                                                      context,
-                                                      MaterialPageRoute<Widget>(
-                                                        builder: (context) => const BottomPageBuilder(),
-                                                      ),
-                                                      (route) => false,
-                                                    ),
-                                                  );
+                                                  .then((value) => context.router.pushAndPopUntil(
+                                                      predicate: (route) => false, BottomRouteBuilder()));
 
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                 const SnackBar(

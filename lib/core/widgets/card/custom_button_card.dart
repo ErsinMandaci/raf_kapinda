@@ -20,9 +20,9 @@ final class CustomAddButton extends ConsumerWidget {
       height: 40,
       width: 40,
       child: IconButton(
-        onPressed: ()  {
+        onPressed: () {
           ref.read(productProvider.notifier).selectedItem(products);
-          if(ref.watch(productProvider).selectedProduct != null)
+          if (ref.watch(productProvider).selectedProduct != null)
           context.router.push(ProductDetailRoute());
         },
         icon: const Icon(
