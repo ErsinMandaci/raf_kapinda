@@ -5,8 +5,8 @@ abstract class AuthBase {
   Future<void> signOut();
   Future<UserModel> signWithEmaiAndPassword(String email, String password);
   Future<UserModel?> createUserWithEmailAndPassword(
-    String email,
-    String password,
-    String userName,
+    final String email,
+    final String password,
+    final String userName,
   );
 }

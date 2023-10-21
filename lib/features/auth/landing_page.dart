@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groceries_app/core/constants/color.dart';
+import 'package:groceries_app/core/widgets/bottom_page_builder.dart';
 import 'package:groceries_app/features/auth/log_in_page.dart';
 import 'package:groceries_app/features/home/home_page.dart';
 import 'package:groceries_app/features/provider/riverpod_management.dart';
@@ -26,7 +27,7 @@ final class LandingPage extends ConsumerWidget {
             );
           } else {
             if (snapshot.hasData) {
-              return const HomePage();
+              return const BottomPageBuilder();
             }
             return LogInPage();
           }
