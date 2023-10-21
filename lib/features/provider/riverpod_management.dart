@@ -6,9 +6,10 @@ import 'package:groceries_app/features/provider/user_provider.dart';
 
 final firebaseInstance = Provider((ref) => FirebaseAuth.instance);
 
-final userProvider = ChangeNotifierProvider<UserNotifier>((ref) {
+final userNotifierProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
   return UserNotifier();
 });
+
 
 final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
   return ProductNotifier();
