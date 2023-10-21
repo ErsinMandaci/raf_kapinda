@@ -1,5 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Riverpod paketini içe aktardık
 import 'package:groceries_app/core/services/firebase/auth_base.dart';
 import 'package:groceries_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:groceries_app/features/repository/user_repository.dart';
@@ -8,21 +10,14 @@ import 'package:groceries_app/model/user_model.dart';
 
 enum ViewState { idle, busy }
 
-final class UserNotifier extends ChangeNotifier implements AuthBase {
+class UserNotifier extends StateNotifier<UserState> implements AuthBase {
   final UserRepository _userRepository = LocatorManager.userRepository;
   final FirebaseAuthService _firebaseService = LocatorManager.firebaseAuth;
 
-  UserModel? _user;
+  UserNotifier() : super(UserState(viewState: ViewState.idle));
 
-  UserModel? get user => _user;
-
-  ViewState _state = ViewState.idle;
-  ViewState get state => _state;
-
-  void setViewState(ViewState value) {
-    _state = value;
-    notifyListeners();
-  }
+  UserModel? get user => state.user;
+  ViewState get viewState => state.viewState;
 
   @override
   Future<UserModel?> createUserWithEmailAndPassword(
@@ -31,73 +26,80 @@ final class UserNotifier extends ChangeNotifier implements AuthBase {
     String userName,
   ) async {
     try {
-      setViewState(ViewState.busy);
-      _user = await _userRepository.createUserWithEmailAndPassword(
+      state = state.copyWith(viewState: ViewState.busy);
+      final user = await _userRepository.createUserWithEmailAndPassword(
         email,
         password,
         userName,
       );
+      state = state.copyWith(user: user, viewState: ViewState.idle);
+      return user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        throw Exception('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        throw Exception('The account already exists for that email.');
-      }
-    } finally {
-      setViewState(ViewState.idle);
+      debugPrint(e.message);
+      state = state.copyWith(viewState: ViewState.idle);
+      rethrow;
     }
-    return null;
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      state = state.copyWith(viewState: ViewState.busy);
+      await _firebaseService.signOut();
+    } catch (e) {
+      // ... hata işleme
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
+    }
   }
 
   @override
   Future<UserModel?> currentUser() async {
     try {
-      _state = ViewState.busy;
-      _user = await _userRepository.currentUser();
-
-      if (_user != null) {
-        return _user;
-      } else {
-        return null;
-      }
+      state = state.copyWith(viewState: ViewState.busy);
+      final user = await _firebaseService.currentUser();
+      state = state.copyWith(user: user, viewState: ViewState.idle);
+      return user;
     } catch (e) {
-      throw Exception('currentUser $e');
     } finally {
-      _state = ViewState.idle;
+      state = state.copyWith(viewState: ViewState.idle);
     }
+    return null;
   }
 
   @override
-  Future<UserModel> signWithEmaiAndPassword(
-    String email,
-    String password,
-  ) async {
+  Future<UserModel> signWithEmaiAndPassword(String email, String password) async {
     try {
-      setViewState(ViewState.busy);
-      _user = await _userRepository.signWithEmaiAndPassword(email, password);
-
-      return _user ?? UserModel();
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw Exception('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        throw Exception('Wrong password provided for that user.');
-      }
+      state = state.copyWith(viewState: ViewState.busy);
+      final user = await _firebaseService.signWithEmaiAndPassword(email, password);
+      state = state.copyWith(user: user, viewState: ViewState.idle);
+      return user;
+    } catch (e) {
+      // ... hata işleme
     } finally {
-      setViewState(ViewState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
-    throw Exception('signWithEmaiAndPassword');
+    return Future.value(UserModel());
+  }
+}
+
+// UserState sınıfını tanımladık
+class UserState extends Equatable {
+  final UserModel? user;
+  final ViewState viewState;
+
+  UserState({this.user, required this.viewState});
+
+  UserState copyWith({
+    UserModel? user,
+    ViewState? viewState,
+  }) {
+    return UserState(
+      user: user ?? this.user,
+      viewState: viewState ?? this.viewState,
+    );
   }
 
   @override
-  Future<void> signOut() {
-    try {
-      setViewState(ViewState.busy);
-      return _firebaseService.signOut();
-    } catch (e) {
-      throw Exception('signOut $e');
-    } finally {
-      setViewState(ViewState.idle);
-    }
-  }
+  List<Object?> get props => [user, viewState];
 }
