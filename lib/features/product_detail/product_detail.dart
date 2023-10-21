@@ -62,11 +62,10 @@ final class ProductDetailPage extends ConsumerWidget {
                   IconButton(
                     onPressed: () {
                       ref.read(productProvider.notifier).changeFavoriteCard(selectItem);
-                      print(ref.watch(productProvider).isFavorite);
                     },
                     icon: Icon(
                       Icons.favorite,
-                      color: ref.watch(productProvider).isFavorite  ? Colors.red : Colors.grey,
+                      color: ref.watch(productProvider).isFavorite ? Colors.red : Colors.grey,
                       size: 30,
                     ),
                   ),
@@ -100,7 +99,7 @@ final class ProductDetailPage extends ConsumerWidget {
                             ),
                           ),
                           child: CustomTextWidget(
-                            text: "${ref.watch(productProvider).productQuantity}",
+                            text: "${ref.watch(productProvider.notifier).getProductQuantity(selectItem.id.toString())}",
                             fontsize: 24,
                           ),
                         ),
@@ -117,7 +116,7 @@ final class ProductDetailPage extends ConsumerWidget {
                       ],
                     ),
                     CustomTextWidget(
-                      text: '\$${ref.watch(productProvider).totalBasketPrice.toStringAsFixed(2)}',
+                      text: '\$${ref.watch(productProvider).productTotalPrice.toStringAsFixed(2)}',
                       fontsize: 24,
                     ),
                   ],

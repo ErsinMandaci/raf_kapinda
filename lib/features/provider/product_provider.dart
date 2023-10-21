@@ -26,7 +26,11 @@ final class ProductNotifier extends StateNotifier<ProductState> {
   void selectedItem(Products selected) {
     final selectedProducts = state.productList?.where((element) => element.id == selected.id).toList();
     if (selectedProducts.isNullOrEmpty) return;
-    state = state.copyWith(selectedProduct: selectedProducts?.first);
+
+    final updatedSelectedProduct = selectedProducts!.first;
+    final updatedTotalPrice = (updatedSelectedProduct.price ?? 0.0) * (updatedSelectedProduct.quantity ?? 0);
+
+    state = state.copyWith(selectedProduct: updatedSelectedProduct, totalPrice: updatedTotalPrice);
   }
 
   // Filters the product list by the given category and returns the filtered list.
@@ -52,8 +56,6 @@ final class ProductNotifier extends StateNotifier<ProductState> {
 
   // Adds a [Products] object to the basket list in the current [state].
   // If the basket list is null, it creates a new list and adds the product to it.
-  // Otherwise, it creates a copy of the existing list and adds the product to the copy.
-  // Finally, it updates the state with the new basket list.
   void addProductBasket(Products products) {
     final updateBasketList = List<Products>.from(state.basketList ?? []);
     updateBasketList.add(products);
@@ -70,36 +72,72 @@ final class ProductNotifier extends StateNotifier<ProductState> {
   // Increments the quantity of the given [product] in the [state]'s [productList].
   // Returns nothing.
   void incrementProductQuantity(Products product) {
-    final updatedQuantity = (product.quantity ?? 0) + 1;
-    state = state.copyWith(productQuantity: updatedQuantity);
+    final updatedProductList = state.productList?.map((element) {
+      if (element.id == product.id) {
+        final updatedQuantity = (element.quantity ?? 0) + 1;
+        final updatedProduct = element.copyWith(quantity: updatedQuantity);
+        if (state.selectedProduct?.id == product.id) {
+          state = state.copyWith(selectedProduct: updatedProduct);
+        }
+        return updatedProduct;
+      }
+      return element;
+    }).toList();
+    state = state.copyWith(productList: updatedProductList);
+    calculateProductTotalPrice();
   }
 
   void decrementProductQuantity(Products product) {
-    if ((product.quantity ?? 0) > 0) {
-      final updatedQuantity = (product.quantity ?? 0) - 1;
-      state = state.copyWith(productQuantity: updatedQuantity);
-    }
+    final updatedProductList = state.productList?.map((element) {
+      if (element.id == product.id && (element.quantity ?? 0) > 0) {
+        final updatedQuantity = (element.quantity ?? 0) - 1;
+        final updatedProduct = element.copyWith(quantity: updatedQuantity);
+        if (state.selectedProduct?.id == product.id) {
+          state = state.copyWith(selectedProduct: updatedProduct);
+        }
+        return updatedProduct;
+      }
+      return element;
+    }).toList();
+    state = state.copyWith(productList: updatedProductList);
+    calculateProductTotalPrice();
   }
 
+  // total product quantity
+  int getProductQuantity(String productId) {
+    final product =
+        state.productList?.firstWhere((p) => p.id.toString() == productId.toString(), orElse: () => Products());
+    return product?.quantity ?? 0;
+  }
+
+  /// Searches the product list for products whose name contains the given query string.
+  /// If the query string is empty or null, the search results will be empty.
   void searchProducts(String query) {
     if (state.productList.isNullOrEmpty) return;
-    final searchResults =
-        state.productList!.where((product) => product.name!.toLowerCase().contains(query.toLowerCase())).toList();
+    final searchResults = state.productList!
+        .where((product) => product.name!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     state = state.copyWith(searchResults: searchResults);
   }
 
-  void calculateTotalBasketPrice() {
-    final basketList = state.basketList;
-    if (basketList != null && basketList.isNotEmpty) {
-      double total = 0.0;
-      for (var product in basketList) {
-        total += (product.price ?? 0.0) * (product.quantity ?? 1);
-      }
-      state = state.copyWith(totalBasketPrice: total);
-    } else {
-      state = state.copyWith(totalBasketPrice: 0.0);
-    }
+  /// Calculates the total price of the product.
+  void calculateProductTotalPrice() {
+    final totalPrice = (state.selectedProduct?.price ?? 0.0) * (state.selectedProduct?.quantity ?? 0);
+    state = state.copyWith(totalPrice: totalPrice);
   }
+
+  // void calculateTotalBasketPrice() {
+  //   final basketList = state.basketList;
+  //   if (basketList != null && basketList.isNotEmpty) {
+  //     double total = 0.0;
+  //     for (var product in basketList) {
+  //       total += (product.price ?? 0.0) * (product.quantity ?? 1);
+  //     }
+  //     state = state.copyWith(totalBasketPrice: total);
+  //   } else {
+  //     state = state.copyWith(totalBasketPrice: 0.0);
+  //   }
+  // }
 }
 
 final class ProductState extends Equatable {
@@ -111,8 +149,6 @@ final class ProductState extends Equatable {
   final List<Products>? basketList;
   // The favorite status of the product
   final bool isFavorite;
-  // The quantity of the product
-  final int productQuantity;
   // The list of favorite products
   final List<Products>? filteredFavoriteList;
   // The selected product
@@ -121,17 +157,21 @@ final class ProductState extends Equatable {
   final double totalBasketPrice;
   // The list of products that match the search query
   final List<Products>? searchResults;
+  // The total price of the product
+  final double productTotalPrice;
+
+  //
 
   ProductState({
     this.productList,
     this.categoryList,
     this.basketList,
     this.isFavorite = false,
-    this.productQuantity = 1,
     this.filteredFavoriteList,
     this.totalBasketPrice = 0,
     this.searchResults,
     this.selectedProduct,
+    this.productTotalPrice = 0,
   });
 
   ProductState copyWith({
@@ -144,17 +184,18 @@ final class ProductState extends Equatable {
     double? totalBasketPrice,
     List<Products>? searchResults,
     Products? selectedProduct,
+    double? totalPrice,
   }) {
     return ProductState(
       productList: productList ?? this.productList,
       categoryList: categoryList ?? this.categoryList,
       basketList: basketList ?? this.basketList,
       isFavorite: isFavorite ?? this.isFavorite,
-      productQuantity: productQuantity ?? this.productQuantity,
       filteredFavoriteList: filteredFavoriteList ?? this.filteredFavoriteList,
       totalBasketPrice: totalBasketPrice ?? this.totalBasketPrice,
       searchResults: searchResults ?? this.searchResults,
       selectedProduct: selectedProduct ?? this.selectedProduct,
+      productTotalPrice: totalPrice ?? this.productTotalPrice,
     );
   }
 
@@ -164,10 +205,10 @@ final class ProductState extends Equatable {
         categoryList,
         basketList,
         isFavorite,
-        productQuantity,
         filteredFavoriteList,
         totalBasketPrice,
         searchResults,
         selectedProduct,
+        productTotalPrice,
       ];
 }
